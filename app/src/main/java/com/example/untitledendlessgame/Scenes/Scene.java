@@ -11,6 +11,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
@@ -19,17 +20,19 @@ public class Scene {
             SETTINGS = 5, CREDITS = 6;
     int sceneNumber;
     int screenWidth, screenHeight;
+    boolean orientation;    //true -> Vertical, false -> Horizontal
     Context context;
     AudioManager sounds;
     SoundPool effects;
     Paint pRects;
     Rect rBack;
 
-    public Scene(int sceneNumber, int screenWidth, int screenHeight, Context context) {
+    public Scene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
         this.sceneNumber = sceneNumber;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.context = context;
+        this.orientation = orientation;
 
         //Inicialización sonido y efectos
         sounds = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -38,13 +41,14 @@ public class Scene {
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
         this.effects = spb.build();
 
-        //Inicialización pincel para rectángulos
+        //Declaración e inicialización pincel para rectángulos
         pRects = new Paint();
-        pRects.setColor(Color.BLACK);
+        pRects.setColor(Color.argb(0, 0, 0, 0));
+//        pRects.setColor(Color.BLACK);
         pRects.setStyle(Paint.Style.STROKE);
         pRects.setStrokeWidth(10);
 
-        //Inicialización rectángulo botón atrás
+        //Declaración rectángulo botón atrás
         rBack = new Rect(0, 0, this.getPixels(50), this.getPixels(50));
     }
 
@@ -54,7 +58,7 @@ public class Scene {
 
     public void draw(Canvas canvas) {
         canvas.drawARGB(255, 196, 0, 0);
-//        canvas.drawRect(rBack, pRects);
+
     }
 
     public void updatePhysics() {
@@ -92,5 +96,30 @@ public class Scene {
             return bmpAux;
         }
         return Bitmap.createScaledBitmap(bmpAux, (bmpAux.getWidth() * newHeight) / bmpAux.getHeight(), newHeight, true);
+    }
+
+    public void Grid(Canvas canvas, int X, int Y) {
+        int line = getPixels(5), gap, position;
+        Paint p = new Paint();
+        p.setColor(Color.WHITE);
+        p.setTextSize(getPixels(40));
+        p.setStrokeWidth(line);
+
+        position = 0;
+        gap = (int) Math.ceil(screenWidth / X);
+        for (int i = 0; i < screenWidth; i++) {
+            canvas.drawLine(position, 0, position, screenHeight, p);
+            canvas.drawText(i + "", 10, position, p);
+            position += gap;
+        }
+
+        p.setColor(Color.BLUE);
+        position = 0;
+        gap = (int) Math.ceil(screenHeight / Y);
+        for (int i = 0; i < screenWidth; i++) {
+            canvas.drawLine(position, 0, screenHeight, position, p);
+            canvas.drawText(i + "", position, getPixels(50), p);
+            position += gap;
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.untitledendlessgame;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.Log;
@@ -18,12 +17,17 @@ import com.example.untitledendlessgame.Scenes.TutorialScene;
 import java.util.Arrays;
 
 public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callback {
+    boolean orientation;
     private SurfaceHolder surfaceHolder;
     private Context context;
     private int screenWidth = 1, screenHeight = 1;
-    private GameThread thread;
+    private MenuThread thread;
     private boolean working;
     Scene actualScene;
+
+    public void setOrientation(boolean orientation) {
+        this.orientation = orientation;
+    }
 
     public PruebaGameMain(Context context) {
         super(context);
@@ -31,30 +35,42 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         this.surfaceHolder.addCallback(this);
         this.context = context;
         working = false;
-        thread = new GameThread();
+        thread = new MenuThread();
         setFocusable(true);
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int newScene = actualScene.onTouchEvent(event);
-
         if (newScene != actualScene.getSceneNumber()) {
             changeScene(newScene);
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     public void changeScene(int newScene) {
         switch (newScene) {
+            case Scene.MENU:
+                actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
+                break;
             case Scene.PLAY:
-                actualScene = new PlayScene(Scene.PLAY, screenWidth, screenHeight, context);
+                actualScene = new PlayScene(Scene.PLAY, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.TUTORIAL:
-                actualScene = new TutorialScene(Scene.TUTORIAL, screenWidth, screenHeight, context);
+                actualScene = new TutorialScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation);
+                break;
+            case Scene.ACHIEVMENTS:
+                actualScene = new TutorialScene(Scene.ACHIEVMENTS, screenWidth, screenHeight, context, orientation);
+                break;
+            case Scene.MARKERS:
+                actualScene = new TutorialScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
+                break;
+            case Scene.SETTINGS:
+                actualScene = new TutorialScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.CREDITS:
-                actualScene = new CreditsScene(Scene.CREDITS, screenWidth, screenHeight, context);
+                actualScene = new CreditsScene(Scene.CREDITS, screenWidth, screenHeight, context, orientation);
                 break;
         }
     }
@@ -71,17 +87,18 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         screenWidth = width;
         screenHeight = height;
 //        thread.setSurfaceSize(width, height);
-        actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context);
+        actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
         if (!working) {
             thread.setWorking(true);
             if (thread.getState() == Thread.State.NEW) {
                 thread.start();
             }
             if (thread.getState() == Thread.State.TERMINATED) {
-                thread = new GameThread();
+                thread = new MenuThread();
                 thread.start();
             }
         }
+        changeScene(actualScene.getSceneNumber());
     }
 
     @Override
@@ -95,8 +112,8 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         }
     }
 
-    class GameThread extends Thread {
-        public GameThread() {
+    class MenuThread extends Thread {
+        public MenuThread() {
         }
 
         void setWorking(boolean flag) {
@@ -118,6 +135,7 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
                     }
                     synchronized (surfaceHolder) {
                         if (canvas != null) {
+                            Log.i("Ori_port", orientation + "");
                             actualScene.updatePhysics();
                             actualScene.draw(canvas);
                         }

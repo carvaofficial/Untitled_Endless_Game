@@ -8,8 +8,8 @@ import android.view.MotionEvent;
 public class PlayScene extends Scene {
 
 
-    public PlayScene(int sceneNumber, int screenWidth, int screenHeight, Context context) {
-        super(sceneNumber, screenWidth, screenHeight, context);
+    public PlayScene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
+        super(sceneNumber, screenWidth, screenHeight, context, orientation);
 
     }
 
@@ -17,7 +17,7 @@ public class PlayScene extends Scene {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawColor(Color.GREEN);
-        canvas.drawRect(rBack, pRects);
+        canvas.drawRect(super.rBack, super.pRects);
     }
 
     @Override
