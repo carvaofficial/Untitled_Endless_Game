@@ -3,4 +3,5 @@
     <string name="icon_config" translatable="false">&#xf013;</string>
     <string name="icon_achievments" translatable="false">&#xf5a2;</string>
     <string name="icon_markers" translatable="false">&#xf091;</string>
+    <string name="icon_back" translatable="false">&#xf060;</string>
 </resources>

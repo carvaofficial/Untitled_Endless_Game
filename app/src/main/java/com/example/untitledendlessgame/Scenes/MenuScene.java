@@ -87,13 +87,13 @@ public class MenuScene extends Scene {
         canvas.drawText("Game", screenWidth / 2, (screenHeight / 4) + (pTitle.getTextSize() * 2), pTitle);
 
         //Dibuja iconos
-        int icSeparation = getPixels(15);
-        canvas.drawText(mainOptions[3], icSeparation,
-                icSeparation + pIcons.getTextSize(), pIcons);
-        canvas.drawText(mainOptions[4], (icSeparation * 2) +
-                pIcons.getTextSize(), icSeparation + pIcons.getTextSize(), pIcons);
-        canvas.drawText(mainOptions[5], (icSeparation * 3) +
-                (pIcons.getTextSize() * 2), icSeparation + pIcons.getTextSize(), pIcons);
+        int iconSeparation = getPixels(15);
+        canvas.drawText(mainOptions[3], iconSeparation,
+                iconSeparation + pIcons.getTextSize(), pIcons);
+        canvas.drawText(mainOptions[4], (iconSeparation * 2) +
+                pIcons.getTextSize(), iconSeparation + pIcons.getTextSize(), pIcons);
+        canvas.drawText(mainOptions[5], (iconSeparation * 3) +
+                (pIcons.getTextSize() * 2), iconSeparation + pIcons.getTextSize(), pIcons);
 
         if (orientation) {
             //Dibuja opciones (Vertical)
@@ -123,22 +123,22 @@ public class MenuScene extends Scene {
             rCredits.bottom = (int) (screenHeight - (screenHeight / 4) + (optSeparation * 2) + (pOptions.getTextSize() / 3));
 
             //Rect rSettings
-            rSettings.left = icSeparation;
-            rSettings.right = icSeparation + rLengths[3];
-            rSettings.top = icSeparation + getPixels(5);
-            rSettings.bottom = icSeparation + getPixels(5) + rLengths[3];
+            rSettings.left = iconSeparation;
+            rSettings.right = iconSeparation + rLengths[3];
+            rSettings.top = iconSeparation + getPixels(5);
+            rSettings.bottom = iconSeparation + getPixels(5) + rLengths[3];
 
             //Rect rAchievments
-            rAchievments.left = (icSeparation * 2) + rLengths[3];
-            rAchievments.right = (icSeparation * 2) + (rLengths[4] * 2);
-            rAchievments.top = icSeparation + getPixels(5);
-            rAchievments.bottom = icSeparation + getPixels(5) + rLengths[4];
+            rAchievments.left = (iconSeparation * 2) + rLengths[3];
+            rAchievments.right = (iconSeparation * 2) + (rLengths[4] * 2);
+            rAchievments.top = iconSeparation + getPixels(5);
+            rAchievments.bottom = iconSeparation + getPixels(5) + rLengths[4];
 
             //Rect rMarkers
-            rMarkers.left = (icSeparation * 3) + (rLengths[3] * 2);
-            rMarkers.right = (icSeparation * 3) + (rLengths[3] * 2) + rLengths[5];
-            rMarkers.top = icSeparation + getPixels(5);
-            rMarkers.bottom = icSeparation + getPixels(5) + rLengths[4];
+            rMarkers.left = (iconSeparation * 3) + (rLengths[3] * 2);
+            rMarkers.right = (iconSeparation * 3) + (rLengths[3] * 2) + rLengths[5];
+            rMarkers.top = iconSeparation + getPixels(5);
+            rMarkers.bottom = iconSeparation + getPixels(5) + rLengths[4];
         } else {
             int landSep = getPixels(20);
             //Dibuja opciones (Horizontal)
@@ -169,22 +169,22 @@ public class MenuScene extends Scene {
             rCredits.bottom = (int) (screenHeight - (screenHeight / 4) + optSeparation + (pOptions.getTextSize() / 3));
 
             //Rect rSettings
-            rSettings.left = icSeparation;
-            rSettings.right = icSeparation + rLengths[3];
-            rSettings.top = icSeparation + getPixels(5);
-            rSettings.bottom = icSeparation + getPixels(5) + rLengths[3];
+            rSettings.left = iconSeparation;
+            rSettings.right = iconSeparation + rLengths[3];
+            rSettings.top = iconSeparation + getPixels(5);
+            rSettings.bottom = iconSeparation + getPixels(5) + rLengths[3];
 
             //Rect rAchievments
-            rAchievments.left = (icSeparation * 2) + rLengths[3];
-            rAchievments.right = (icSeparation * 2) + (rLengths[4] * 2);
-            rAchievments.top = icSeparation + getPixels(5);
-            rAchievments.bottom = icSeparation + getPixels(5) + rLengths[4];
+            rAchievments.left = (iconSeparation * 2) + rLengths[3];
+            rAchievments.right = (iconSeparation * 2) + (rLengths[4] * 2);
+            rAchievments.top = iconSeparation + getPixels(5);
+            rAchievments.bottom = iconSeparation + getPixels(5) + rLengths[4];
 
             //Rect rMarkers
-            rMarkers.left = (icSeparation * 3) + (rLengths[3] * 2);
-            rMarkers.right = (icSeparation * 3) + (rLengths[3] * 2) + rLengths[5];
-            rMarkers.top = icSeparation + getPixels(5);
-            rMarkers.bottom = icSeparation + getPixels(5) + rLengths[4];
+            rMarkers.left = (iconSeparation * 3) + (rLengths[3] * 2);
+            rMarkers.right = (iconSeparation * 3) + (rLengths[3] * 2) + rLengths[5];
+            rMarkers.top = iconSeparation + getPixels(5);
+            rMarkers.bottom = iconSeparation + getPixels(5) + rLengths[4];
         }
 
         //Dibuja rectángulos de opciones

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -15,16 +16,19 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
+import com.example.untitledendlessgame.R;
+
 public class Scene {
     public static final int MENU = 0, PLAY = 1, TUTORIAL = 2, ACHIEVMENTS = 3, MARKERS = 4,
             SETTINGS = 5, CREDITS = 6;
     int sceneNumber;
     int screenWidth, screenHeight;
+    //    int iconSeparation = getPixels(15);   //TODO No puedo poner esta variable aqui, explota el canvas, consultar a Javi
     boolean orientation;    //true -> Vertical, false -> Horizontal
     Context context;
     AudioManager sounds;
     SoundPool effects;
-    Paint pRects;
+    Paint pRects, pBack;
     Rect rBack;
 
     public Scene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
@@ -43,13 +47,35 @@ public class Scene {
 
         //Declaración e inicialización pincel para rectángulos
         pRects = new Paint();
-        pRects.setColor(Color.argb(0, 0, 0, 0));
-//        pRects.setColor(Color.BLACK);
+//        pRects.setColor(Color.argb(0, 0, 0, 0));
+        pRects.setColor(Color.BLACK);
         pRects.setStyle(Paint.Style.STROKE);
         pRects.setStrokeWidth(10);
 
+        pBack = new Paint();
+        pBack.setColor(Color.WHITE);
+        pBack.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/icons-solid.ttf"));
+        pBack.setAntiAlias(true);
+
+        //Gestión de tamaño de pinceles según orientación
+        if (orientation) {
+            pBack.setTextSize(screenWidth / 12);
+        } else {
+            pBack.setTextSize(screenWidth / 24);
+        }
+
         //Declaración rectángulo botón atrás
-        rBack = new Rect(0, 0, this.getPixels(50), this.getPixels(50));
+        int iconSeparation = getPixels(15), rBLength;
+
+        rBack = new Rect();
+        pBack.getTextBounds(context.getString(R.string.icon_back), 0,
+                context.getString(R.string.icon_back).length(), rBack);
+        rBLength = rBack.right;
+
+        rBack.left = iconSeparation;
+        rBack.right = iconSeparation + rBLength;
+        rBack.top = iconSeparation + getPixels(5);
+        rBack.bottom = iconSeparation + getPixels(5) + rBLength;
     }
 
     public int getSceneNumber() {
@@ -57,8 +83,12 @@ public class Scene {
     }
 
     public void draw(Canvas canvas) {
+        int iconSeparation = getPixels(15);
         canvas.drawARGB(255, 196, 0, 0);
-
+        if (sceneNumber != Scene.MENU) {
+            canvas.drawText(context.getString(R.string.icon_back), iconSeparation, iconSeparation + pBack.getTextSize(), pBack);
+            canvas.drawRect(rBack, pRects);
+        }
     }
 
     public void updatePhysics() {
