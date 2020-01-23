@@ -16,20 +16,16 @@ import com.example.untitledendlessgame.Scenes.TutorialScene;
 
 import java.util.Arrays;
 
-public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callback {
-    boolean orientation;
+public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;
     private Context context;
     private int screenWidth = 1, screenHeight = 1;
     private MenuThread thread;
     private boolean working;
-    Scene actualScene;
+    private boolean orientation;
+    private Scene actualScene;
 
-    public void setOrientation(boolean orientation) {
-        this.orientation = orientation;
-    }
-
-    public PruebaGameMain(Context context) {
+    public MenuSurfaceView(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
         this.surfaceHolder.addCallback(this);
@@ -37,8 +33,12 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         working = false;
         thread = new MenuThread();
         setFocusable(true);
+        actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
     }
 
+    public void setOrientation(boolean orientation) {
+        this.orientation = orientation;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -87,7 +87,6 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         screenWidth = width;
         screenHeight = height;
 //        thread.setSurfaceSize(width, height);
-        actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
         if (!working) {
             thread.setWorking(true);
             if (thread.getState() == Thread.State.NEW) {
@@ -108,7 +107,7 @@ public class PruebaGameMain extends SurfaceView implements SurfaceHolder.Callbac
         try {
             thread.join();
         } catch (InterruptedException ie) {
-            Log.i("Thread Exception", Arrays.toString(ie.getStackTrace()));
+            Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
         }
     }
 
