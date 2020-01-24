@@ -2,7 +2,6 @@ package com.example.untitledendlessgame.Scenes;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -42,7 +41,7 @@ public class MenuScene extends Scene {
         //Dibujo de textos:
         String mainOptions[] = {"Jugar", "Tutorial", "Creditos", context.getString(R.string.icon_config),
                 context.getString(R.string.icon_achievments), context.getString(R.string.icon_markers)};
-        util.optionSeparation = (int) (util.pRegular.getTextSize() * 2 - (util.pRegular.getTextSize() / 3));
+        util.optionSeparation = (int) (util.pRegular.getTextSize() * 2 - (util.pRegular.getTextSize() / 5));
 
         //Obteniendo ancho de textos e iconos
         util.pRegular.getTextBounds(mainOptions[0], 0, mainOptions[0].length(), rPlay);
@@ -69,7 +68,7 @@ public class MenuScene extends Scene {
                 (util.pIcons.getTextSize() * 2), util.iconSeparation + util.pIcons.getTextSize(), util.pIcons);
 
         if (orientation) {
-            //Dibuja opciones (Vertical)
+            //Dibujo de opciones (Vertical);
             canvas.drawText(mainOptions[0], screenWidth / 2, screenHeight - (screenHeight / 4), util.pRegular);
             canvas.drawText(mainOptions[1], screenWidth / 2, screenHeight - (screenHeight / 4) +
                     util.optionSeparation, util.pRegular);
@@ -117,13 +116,14 @@ public class MenuScene extends Scene {
             rMarkers.top = util.iconSeparation + util.getPixels(5);
             rMarkers.bottom = util.iconSeparation + util.getPixels(5) + rLengths[4];
         } else {
-            int landSep = util.getPixels(20);
-            //Dibuja opciones (Horizontal)
+            util.landSeparation = util.getPixels(20);
+
+            //Dibujo de opciones (Horizontal):
             canvas.drawText(mainOptions[0], screenWidth / 2, screenHeight - (screenHeight / 4) +
                     util.optionSeparation, util.pRegular);
-            canvas.drawText(mainOptions[1], screenWidth / 3 - landSep,
+            canvas.drawText(mainOptions[1], screenWidth / 3 - util.landSeparation,
                     screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular);
-            canvas.drawText(mainOptions[2], screenWidth - (screenWidth / 3) + landSep,
+            canvas.drawText(mainOptions[2], screenWidth - (screenWidth / 3) + util.landSeparation,
                     screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular);
 
             //Dibujo de rectángulos  (Horizontal):
@@ -134,16 +134,16 @@ public class MenuScene extends Scene {
             rPlay.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation + (util.pRegular.getTextSize() / 3));
 
             //Rect rTutorial
-            rTutorial.left = screenWidth / 3 - (rLengths[1] / 2) - landSep;
-            rTutorial.right = screenWidth / 3 + (rLengths[1] / 2) - landSep;
+            rTutorial.left = screenWidth / 3 - (rLengths[1] / 2) - util.landSeparation;
+            rTutorial.right = screenWidth / 3 + (rLengths[1] / 2) - util.landSeparation;
             rTutorial.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
                     - util.pRegular.getTextSize());
             rTutorial.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
                     + (util.pRegular.getTextSize() / 3));
 
             //Rect rCredits
-            rCredits.left = screenWidth - (screenWidth / 3) - (rLengths[2] / 2) + landSep;
-            rCredits.right = screenWidth - (screenWidth / 3) + (rLengths[2] / 2) + landSep;
+            rCredits.left = screenWidth - (screenWidth / 3) - (rLengths[2] / 2) + util.landSeparation;
+            rCredits.right = screenWidth - (screenWidth / 3) + (rLengths[2] / 2) + util.landSeparation;
             rCredits.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
                     util.pRegular.getTextSize());
             rCredits.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation +

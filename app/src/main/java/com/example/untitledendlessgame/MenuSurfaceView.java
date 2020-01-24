@@ -10,12 +10,16 @@ import android.view.SurfaceHolder;
 
 import com.example.untitledendlessgame.Scenes.CreditsScene;
 import com.example.untitledendlessgame.Scenes.MenuScene;
-import com.example.untitledendlessgame.Scenes.PlayScene;
+import com.example.untitledendlessgame.Scenes.GameModeScene;
 import com.example.untitledendlessgame.Scenes.Scene;
 import com.example.untitledendlessgame.Scenes.TutorialScene;
 
 import java.util.Arrays;
 
+//TODO preguntar a Javi como hacer que al girar la pantalla se cargue el lienzo de la escena actual.
+// Al girar la pantalla en una escenea que no sea Menú, se repinta la escena Menú. Se piensa que al
+// ejecutarse surfaceChanged() el hilo finaliza y se hace uno nuevo, actualScene se vuelve nulo y
+// al ser un int null==0, y el numero de escena de Menú es 0...
 public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;
     private Context context;
@@ -55,19 +59,19 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.PLAY:
-                actualScene = new PlayScene(Scene.PLAY, screenWidth, screenHeight, context, orientation);
+                actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation, false);
                 break;
             case Scene.TUTORIAL:
-                actualScene = new TutorialScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation);
+                actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation, true);
                 break;
             case Scene.ACHIEVMENTS:
-                actualScene = new TutorialScene(Scene.ACHIEVMENTS, screenWidth, screenHeight, context, orientation);
+                actualScene = new CreditsScene(Scene.ACHIEVMENTS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.MARKERS:
-                actualScene = new TutorialScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
+                actualScene = new CreditsScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.SETTINGS:
-                actualScene = new TutorialScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
+                actualScene = new CreditsScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.CREDITS:
                 actualScene = new CreditsScene(Scene.CREDITS, screenWidth, screenHeight, context, orientation);

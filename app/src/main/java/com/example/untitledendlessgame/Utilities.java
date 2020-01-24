@@ -12,9 +12,11 @@ import android.view.WindowManager;
 
 public class Utilities {
     int screenWidth, screenHeight;
-    public int iconSeparation, optionSeparation;
+    public int iconSeparation, optionSeparation, landSeparation;
     Context context;
-    public Paint pBold, pRegular, pRects, pIcons;
+    public Paint pBold, pRegular, pRegular2, pRects, pIcons;
+    //TODO crear Paint dinámicos, para usar diferentes tamaños de pincel con mismo estilo
+//    public Paint pBold[] = new Paint[5], pRegular[] = new Paint[5];
 
     public Utilities(Context context, int screenWidth, int screenHeight) {
         this.context = context;
@@ -37,6 +39,11 @@ public class Utilities {
         pRegular.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
         pRegular.setTextAlign(Paint.Align.CENTER);
         pRegular.setAntiAlias(true);
+        pRegular2 = new Paint();
+        pRegular2.setColor(Color.WHITE);
+        pRegular2.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
+        pRegular2.setTextAlign(Paint.Align.CENTER);
+        pRegular2.setAntiAlias(true);
 
         //Paint iconos
         pIcons = new Paint();
