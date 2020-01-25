@@ -1,6 +1,7 @@
 package com.example.untitledendlessgame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.Log;
@@ -12,32 +13,41 @@ import com.example.untitledendlessgame.Scenes.CreditsScene;
 import com.example.untitledendlessgame.Scenes.MenuScene;
 import com.example.untitledendlessgame.Scenes.GameModeScene;
 import com.example.untitledendlessgame.Scenes.Scene;
-import com.example.untitledendlessgame.Scenes.TutorialScene;
+import com.example.untitledendlessgame.Scenes.SettingsActivity;
 
 import java.util.Arrays;
 
-//TODO preguntar a Javi como hacer que al girar la pantalla se cargue el lienzo de la escena actual.
-// Al girar la pantalla en una escenea que no sea Menú, se repinta la escena Menú. Se piensa que al
-// ejecutarse surfaceChanged() el hilo finaliza y se hace uno nuevo, actualScene se vuelve nulo y
-// al ser un int null==0, y el numero de escena de Menú es 0...
 public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+    Context context;
     private SurfaceHolder surfaceHolder;
-    private Context context;
-    private int screenWidth = 1, screenHeight = 1;
     private MenuThread thread;
+    private Scene actualScene;
     private boolean working;
     private boolean orientation;
-    private Scene actualScene;
+    private int screenWidth, screenHeight;
+    private int surfaceSceneNumber = Scene.MENU;
+    Intent intent;
 
     public MenuSurfaceView(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
         this.surfaceHolder.addCallback(this);
         this.context = context;
+
         working = false;
         thread = new MenuThread();
         setFocusable(true);
-        actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
+        actualScene = new MenuScene(surfaceSceneNumber, screenWidth, screenHeight, context, orientation);
+        Utilities.getScreenInfo();
+    }
+
+    public int getSurfaceSceneNumber() {
+        return surfaceSceneNumber;
+    }
+
+    public void setSurfaceSceneNumber(int surfaceSceneNumber) {
+        this.surfaceSceneNumber = surfaceSceneNumber;
+        changeScene(surfaceSceneNumber);
     }
 
     public void setOrientation(boolean orientation) {
@@ -62,7 +72,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation, false);
                 break;
             case Scene.TUTORIAL:
-                actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation, true);
+                actualScene = new GameModeScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation, true);
                 break;
             case Scene.ACHIEVMENTS:
                 actualScene = new CreditsScene(Scene.ACHIEVMENTS, screenWidth, screenHeight, context, orientation);
@@ -71,12 +81,15 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new CreditsScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.SETTINGS:
-                actualScene = new CreditsScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
+//                actualScene = new CreditsScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
+                intent = new Intent(context, SettingsActivity.class);
+                context.startActivity(intent);
                 break;
             case Scene.CREDITS:
                 actualScene = new CreditsScene(Scene.CREDITS, screenWidth, screenHeight, context, orientation);
                 break;
         }
+        this.surfaceSceneNumber = actualScene.getSceneNumber();
     }
 
     @Override

@@ -15,7 +15,7 @@ public class MenuScene extends Scene {
         super(sceneNumber, screenWidth, screenHeight, context, orientation);
         this.context = context;
 
-        //Declaración de rectángulos:
+        //Inicializacion de rectángulos:
         rPlay = new Rect();
         rTutorial = new Rect();
         rAchievments = new Rect();

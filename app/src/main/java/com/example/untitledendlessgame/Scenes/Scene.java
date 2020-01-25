@@ -44,7 +44,7 @@ public class Scene {
             util.pIcons.setTextSize(screenWidth / 24);
         }
 
-        //Declaración rectángulo botón atrás
+        //Inicialización rectángulo botón atrás
         int iconSeparation = util.getPixels(15), rBLength;
 
         rBack = new Rect();
