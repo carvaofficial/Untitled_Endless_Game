@@ -15,7 +15,7 @@ import com.example.untitledendlessgame.R;
 
 //TODO al cambiar la orientación en esta escena, salta IllegalArgumentException: width and height must be > 0
 // Preguntar a Javi porqué los valores screenWidth y screenHeight se quedan a 0, es provocado por los Bitmaps
-// También revisar qué falla al pulsar rContinue, tras varias pulsaciones se ejecuta el codigo de onTouchEvent()
+// También revisar qué falla al pulsar rContinue, tras varias pulsaciones se ejecuta el codigo de onTouchEvent();
 public class GameModeScene extends Scene {
     String sContinue, sGameMode1, sGameMode2;
     boolean tutorial, gameSelected;
