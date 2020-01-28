@@ -2,6 +2,7 @@ package com.example.untitledendlessgame.Scenes;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -23,16 +24,19 @@ public class MenuScene extends Scene {
         rSettings = new Rect();
         rCredits = new Rect();
 
+        //Propiedades Paints:
+        util.pBold[0].setTextAlign(Paint.Align.CENTER);
+        util.pRegular[0].setTextAlign(Paint.Align.CENTER);
+
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
-            util.pBold.setTextSize(screenWidth / 6);
-            util.pRegular.setTextSize(screenWidth / 12);
-            util.pIcons.setTextSize(util.pRegular.getTextSize());
+            util.pBold[0].setTextSize(screenWidth / 6);
+            util.pRegular[0].setTextSize(screenWidth / 12);
         } else {
-            util.pBold.setTextSize(screenWidth / 12);
-            util.pRegular.setTextSize(screenWidth / 24);
-            util.pIcons.setTextSize(util.pRegular.getTextSize());
+            util.pBold[0].setTextSize(screenWidth / 12);
+            util.pRegular[0].setTextSize(screenWidth / 24);
         }
+        util.pIcons.setTextSize(util.pRegular[0].getTextSize());
     }
 
     @Override
@@ -41,12 +45,12 @@ public class MenuScene extends Scene {
         //Dibujo de textos:
         String mainOptions[] = {"Jugar", "Tutorial", "Creditos", context.getString(R.string.icon_config),
                 context.getString(R.string.icon_achievments), context.getString(R.string.icon_markers)};
-        util.optionSeparation = (int) (util.pRegular.getTextSize() * 2 - (util.pRegular.getTextSize() / 5));
+        util.optionSeparation = (int) (util.pRegular[0].getTextSize() * 2 - (util.pRegular[0].getTextSize() / 5));
 
         //Obteniendo ancho de textos e iconos
-        util.pRegular.getTextBounds(mainOptions[0], 0, mainOptions[0].length(), rPlay);
-        util.pRegular.getTextBounds(mainOptions[1], 0, mainOptions[1].length(), rTutorial);
-        util.pRegular.getTextBounds(mainOptions[2], 0, mainOptions[2].length(), rCredits);
+        util.pRegular[0].getTextBounds(mainOptions[0], 0, mainOptions[0].length(), rPlay);
+        util.pRegular[0].getTextBounds(mainOptions[1], 0, mainOptions[1].length(), rTutorial);
+        util.pRegular[0].getTextBounds(mainOptions[2], 0, mainOptions[2].length(), rCredits);
         util.pIcons.getTextBounds(mainOptions[3], 0, mainOptions[3].length(), rSettings);
         util.pIcons.getTextBounds(mainOptions[4], 0, mainOptions[4].length(), rAchievments);
         util.pIcons.getTextBounds(mainOptions[5], 0, mainOptions[5].length(), rMarkers);
@@ -54,9 +58,11 @@ public class MenuScene extends Scene {
                 rAchievments.right, rMarkers.right};
 
         //Dibuja titulo
-        canvas.drawText("Untitled", screenWidth / 2, screenHeight / 4, util.pBold);
-        canvas.drawText("Endless", screenWidth / 2, (screenHeight / 4) + util.pBold.getTextSize(), util.pBold);
-        canvas.drawText("Game", screenWidth / 2, (screenHeight / 4) + (util.pBold.getTextSize() * 2), util.pBold);
+        canvas.drawText("Untitled", screenWidth / 2, screenHeight / 4, util.pBold[0]);
+        canvas.drawText("Endless", screenWidth / 2, (screenHeight / 4) +
+                util.pBold[0].getTextSize(), util.pBold[0]);
+        canvas.drawText("Game", screenWidth / 2, (screenHeight / 4) +
+                (util.pBold[0].getTextSize() * 2), util.pBold[0]);
 
         //Dibuja iconos
         util.iconSeparation = util.getPixels(15);
@@ -69,34 +75,34 @@ public class MenuScene extends Scene {
 
         if (orientation) {
             //Dibujo de opciones (Vertical);
-            canvas.drawText(mainOptions[0], screenWidth / 2, screenHeight - (screenHeight / 4), util.pRegular);
+            canvas.drawText(mainOptions[0], screenWidth / 2, screenHeight - (screenHeight / 4), util.pRegular[0]);
             canvas.drawText(mainOptions[1], screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    util.optionSeparation, util.pRegular);
+                    util.optionSeparation, util.pRegular[0]);
             canvas.drawText(mainOptions[2], screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    (util.optionSeparation * 2), util.pRegular);
+                    (util.optionSeparation * 2), util.pRegular[0]);
 
             //Dibujo de rectángulos  (Vertical):
             //Rect rPlay
             rPlay.left = screenWidth / 2 - (rLengths[0] / 2);
             rPlay.right = screenWidth / 2 + (rLengths[0] / 2);
-            rPlay.top = (int) (screenHeight - (screenHeight / 4) - util.pRegular.getTextSize());
-            rPlay.bottom = (int) (screenHeight - (screenHeight / 4) + (util.pRegular.getTextSize() / 3));
+            rPlay.top = (int) (screenHeight - (screenHeight / 4) - util.pRegular[0].getTextSize());
+            rPlay.bottom = (int) (screenHeight - (screenHeight / 4) + (util.pRegular[0].getTextSize() / 3));
 
             //Rect rTutorial
             rTutorial.left = screenWidth / 2 - (rLengths[1] / 2);
             rTutorial.right = screenWidth / 2 + (rLengths[1] / 2);
             rTutorial.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
-                    util.pRegular.getTextSize());
+                    util.pRegular[0].getTextSize());
             rTutorial.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
-                    + (util.pRegular.getTextSize() / 3));
+                    + (util.pRegular[0].getTextSize() / 3));
 
             //Rect rCredits
             rCredits.left = screenWidth / 2 - (rLengths[2] / 2);
             rCredits.right = screenWidth / 2 + (rLengths[2] / 2);
             rCredits.top = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    - util.pRegular.getTextSize());
+                    - util.pRegular[0].getTextSize());
             rCredits.bottom = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    + (util.pRegular.getTextSize() / 3));
+                    + (util.pRegular[0].getTextSize() / 3));
 
             //Rect rSettings
             rSettings.left = util.iconSeparation;
@@ -120,34 +126,36 @@ public class MenuScene extends Scene {
 
             //Dibujo de opciones (Horizontal):
             canvas.drawText(mainOptions[0], screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    util.optionSeparation, util.pRegular);
+                    util.optionSeparation, util.pRegular[0]);
             canvas.drawText(mainOptions[1], screenWidth / 3 - util.landSeparation,
-                    screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular);
+                    screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular[0]);
             canvas.drawText(mainOptions[2], screenWidth - (screenWidth / 3) + util.landSeparation,
-                    screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular);
+                    screenHeight - (screenHeight / 4) + util.optionSeparation, util.pRegular[0]);
 
             //Dibujo de rectángulos  (Horizontal):
             //Rect rPlay
             rPlay.left = screenWidth / 2 - (rLengths[0] / 2);
             rPlay.right = screenWidth / 2 + (rLengths[0] / 2);
-            rPlay.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation - util.pRegular.getTextSize());
-            rPlay.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation + (util.pRegular.getTextSize() / 3));
+            rPlay.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
+                    util.pRegular[0].getTextSize());
+            rPlay.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation +
+                    (util.pRegular[0].getTextSize() / 3));
 
             //Rect rTutorial
             rTutorial.left = screenWidth / 3 - (rLengths[1] / 2) - util.landSeparation;
             rTutorial.right = screenWidth / 3 + (rLengths[1] / 2) - util.landSeparation;
             rTutorial.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
-                    - util.pRegular.getTextSize());
+                    - util.pRegular[0].getTextSize());
             rTutorial.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
-                    + (util.pRegular.getTextSize() / 3));
+                    + (util.pRegular[0].getTextSize() / 3));
 
             //Rect rCredits
             rCredits.left = screenWidth - (screenWidth / 3) - (rLengths[2] / 2) + util.landSeparation;
             rCredits.right = screenWidth - (screenWidth / 3) + (rLengths[2] / 2) + util.landSeparation;
             rCredits.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
-                    util.pRegular.getTextSize());
+                    util.pRegular[0].getTextSize());
             rCredits.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation +
-                    (util.pRegular.getTextSize() / 3));
+                    (util.pRegular[0].getTextSize() / 3));
 
             //Rect rSettings
             rSettings.left = util.iconSeparation;
@@ -181,7 +189,6 @@ public class MenuScene extends Scene {
     public int onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
                 if (rPlay.contains((int) event.getX(), (int) event.getY())) {
                     return Scene.PLAY;
                 }
@@ -189,7 +196,7 @@ public class MenuScene extends Scene {
                     return Scene.TUTORIAL;
                 }
                 if (rAchievments.contains((int) event.getX(), (int) event.getY())) {
-                    return Scene.ACHIEVMENTS;
+                    return Scene.ACHIEVEMENTS;
                 }
                 if (rMarkers.contains((int) event.getX(), (int) event.getY())) {
                     return Scene.MARKERS;

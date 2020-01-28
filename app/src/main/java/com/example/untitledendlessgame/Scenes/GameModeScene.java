@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.R;
+import com.example.untitledendlessgame.Tutorials.TutorialGameMode1;
+import com.example.untitledendlessgame.Tutorials.TutorialGameMode2;
 
 //TODO al cambiar la orientación en esta escena, salta IllegalArgumentException: width and height must be > 0
 // Preguntar a Javi porqué los valores screenWidth y screenHeight se quedan a 0, es provocado por los Bitmaps
@@ -29,6 +31,7 @@ public class GameModeScene extends Scene {
         super(sceneNumber, screenWidth, screenHeight, context, orientation);
         this.tutorial = tutorial;
         this.gameSelected = true;
+        Log.i("Orientation", "public GameModeScene: " + screenWidth + ":" + screenHeight);
 
         //Inicializacion pinceles:
         pGMStroke = new Paint();
@@ -53,13 +56,21 @@ public class GameModeScene extends Scene {
         rGMStroke2 = new Rect();
         rContinue = new Rect();
 
+        //Propiedades Paints:
+        util.pBold[0].setTextAlign(Paint.Align.CENTER);
+        util.pRegular[0].setTextAlign(Paint.Align.CENTER);
+        util.pRegular[1].setTextAlign(Paint.Align.CENTER);
+
+
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
-            util.pRegular.setTextSize(screenWidth / 18);
-            util.pRegular2.setTextSize(screenWidth / 12);
+            util.pBold[0].setTextSize(screenWidth / 18);
+            util.pRegular[0].setTextSize(screenWidth / 12);
+            util.pRegular[1].setTextSize(screenWidth / 18);
         } else {
-            util.pRegular.setTextSize(screenWidth / 30);
-            util.pRegular2.setTextSize(screenWidth / 24);
+            util.pBold[0].setTextSize(screenWidth / 30);
+            util.pRegular[0].setTextSize(screenWidth / 24);
+            util.pRegular[1].setTextSize(screenWidth / 30);
         }
 
         //Detecta si pulsamos la opción tutorial o jugar del menú principal
@@ -77,34 +88,43 @@ public class GameModeScene extends Scene {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        util.optionSeparation = (int) (util.pRegular2.getTextSize() * 2 - (util.pRegular2.getTextSize() / 5));
+        util.optionSeparation = (int) (util.pRegular[0].getTextSize() * 2 - (util.pRegular[0].getTextSize() / 5));
 
         //Obteniendo ancho de texto
-        util.pRegular2.getTextBounds(sContinue, 0, sContinue.length(), rContinue);
+        util.pRegular[0].getTextBounds(sContinue, 0, sContinue.length(), rContinue);
         int rContinueLength = rContinue.right;
 
         if (orientation) {
-            //Dibujo de imágenes (Vertical):
-            //Bitmap bGameMode1
-            bGameMode1 = util.scaleHeight(img1, screenHeight - (screenHeight / 3));
-            bGameMode1 = util.scaleWidth(img1, screenWidth - (screenWidth / 3));
+            Log.i("Orientation", "drawPort: " + screenWidth + ":" + screenHeight);
 
-            //Bitmap bGameMode2
-            bGameMode2 = util.scaleHeight(img2, screenHeight - (screenHeight / 3));
-            bGameMode2 = util.scaleWidth(img2, screenWidth - (screenWidth / 3));
+            //Esto es una solución temporal, buscar la manera de arreglarlo
+            if (screenWidth > 0 && screenHeight > 0) {
+                //Dibujo de imágenes (Vertical):
+                //Bitmap bGameMode1
+                bGameMode1 = util.scaleHeight(img1, screenHeight - (screenHeight / 3));
+                bGameMode1 = util.scaleWidth(img1, screenWidth - (screenWidth / 3));
 
-            //Dibuja imágenes
-            canvas.drawBitmap(bGameMode1, screenWidth / 6, screenHeight / 8, null);
-            canvas.drawBitmap(bGameMode2, screenWidth / 6, screenHeight / 4 + bGameMode1.getHeight(), null);
+                //Bitmap bGameMode2
+                bGameMode2 = util.scaleHeight(img2, screenHeight - (screenHeight / 3));
+                bGameMode2 = util.scaleWidth(img2, screenWidth - (screenWidth / 3));
+
+                //Dibuja imágenes
+                canvas.drawBitmap(bGameMode1, screenWidth / 6, screenHeight / 8, null);
+                canvas.drawBitmap(bGameMode2, screenWidth / 6, screenHeight / 4 + bGameMode1.getHeight(), null);
+            }
 
             //Dibujo de rectángulos (Vertical):
             //Rect rContinue
             rContinue.left = screenWidth / 2 - (rContinueLength / 2);
             rContinue.right = screenWidth / 2 + (rContinueLength / 2);
             rContinue.top = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    - util.pRegular2.getTextSize());
+                    - util.pRegular[0].getTextSize());
             rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    + (util.pRegular2.getTextSize() / 3));
+                    + (util.pRegular[0].getTextSize() / 3));
+//            rContinue.left =;
+//            rContinue.right =;
+//            rContinue.top =;
+//            rContinue.bottom =;
 
             //Rect rGameMode1
             rGameMode1.left = screenWidth / 6;
@@ -120,36 +140,43 @@ public class GameModeScene extends Scene {
 
             //Dibujo de textos (Vertical);
             canvas.drawText("Seleccionar modo de juego", screenWidth / 2 + util.iconSeparation,
-                    screenHeight / 19, util.pRegular);
+                    screenHeight / 19, util.pBold[0]);
             canvas.drawText(sContinue, screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    (util.optionSeparation * 2), util.pRegular2);
+                    (util.optionSeparation * 2), util.pRegular[0]);
             canvas.drawText(sGameMode1, screenWidth / 2, rGameMode1.bottom + util.getPixels(40),
-                    util.pRegular);
+                    util.pRegular[1]);
             canvas.drawText(sGameMode2, screenWidth / 2, rGameMode2.bottom + util.getPixels(40),
-                    util.pRegular);
+                    util.pRegular[1]);
         } else {
-            //Dibujo de imágenes (Horizontal):
-            //Bitmap bGameMode1
-            bGameMode1 = util.scaleHeight(img1, screenHeight / 2);
-            bGameMode1 = util.scaleWidth(img1, screenWidth / 3);
+            Log.i("Orientation", "drawLand: " + screenWidth + ":" + screenHeight);
+            if (screenWidth > 0 && screenHeight > 0) {
+                //Dibujo de imágenes (Horizontal):
+                //Bitmap bGameMode1
+                bGameMode1 = util.scaleHeight(img1, screenHeight / 2);
+                bGameMode1 = util.scaleWidth(img1, screenWidth / 3);
 
-            //Bitmap bGameMode2
-            bGameMode2 = util.scaleHeight(img2, screenHeight / 2);
-            bGameMode2 = util.scaleWidth(img2, screenWidth / 3);
+                //Bitmap bGameMode2
+                bGameMode2 = util.scaleHeight(img2, screenHeight / 2);
+                bGameMode2 = util.scaleWidth(img2, screenWidth / 3);
 
-            //Dibuja imágenes
-            canvas.drawBitmap(bGameMode1, screenWidth / 12, screenHeight / 5, null);
-            canvas.drawBitmap(bGameMode1, screenWidth - (screenWidth / 12) - bGameMode2.getWidth(),
-                    screenHeight / 5, null);
+                //Dibuja imágenes
+                canvas.drawBitmap(bGameMode1, screenWidth / 12, screenHeight / 5, null);
+                canvas.drawBitmap(bGameMode1, screenWidth - (screenWidth / 12) - bGameMode2.getWidth(),
+                        screenHeight / 5, null);
+            }
 
             //Dibujo de rectángulos (Horizontal):
             //Rect rContinue
-            rContinue.left = screenWidth / 2 - (rContinueLength / 2);
-            rContinue.right = screenWidth / 2 + (rContinueLength / 2);
-            rContinue.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
-                    - util.pRegular2.getTextSize());
-            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation
-                    + (util.pRegular2.getTextSize() / 3));
+            rContinue.left = screenWidth - (screenWidth / 2) - (rContinueLength / 2);
+            rContinue.right = screenWidth - (screenWidth / 2) + (rContinueLength / 2);
+            rContinue.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
+                    util.pRegular[0].getTextSize());
+            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation +
+                    (util.pRegular[0].getTextSize() / 3));
+//            rContinue.left =;
+//            rContinue.right =;
+//            rContinue.top =;
+//            rContinue.bottom =;
 
             //Rect rGameMode1
             rGameMode1.left = screenWidth / 12;
@@ -165,13 +192,13 @@ public class GameModeScene extends Scene {
 
             //Dibujo de textos (Horizontal):
             canvas.drawText("Seleccionar modo de juego", screenWidth / 2,
-                    screenHeight / 9, util.pRegular);
+                    screenHeight / 9, util.pBold[0]);
             canvas.drawText(sContinue, screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    util.optionSeparation, util.pRegular2);
+                    util.optionSeparation, util.pRegular[0]);
             canvas.drawText(sGameMode1, rGameMode1.left + (bGameMode1.getWidth() / 2), rGameMode1.bottom + util.getPixels(40),
-                    util.pRegular);
+                    util.pRegular[1]);
             canvas.drawText(sGameMode2, rGameMode2.left + (bGameMode2.getWidth() / 2), rGameMode2.bottom + util.getPixels(40),
-                    util.pRegular);
+                    util.pRegular[1]);
         }
 
         //Dibuja rectángulos
@@ -211,18 +238,17 @@ public class GameModeScene extends Scene {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && tutorial) {
                     Log.i("GameMode", "onTouchEvent: entra rContinue");
                     if (gameSelected) {
                         Log.i("GameMode", "onTouchEvent: gameSelected");
-//                        intent = new Intent(context, TutorialGameMode1.class);
-//                        context.startActivity(intent);
+                        intent = new Intent(context, TutorialGameMode1.class);
+                        context.startActivity(intent);
                     }
                     if (!gameSelected) {
                         Log.i("GameMode", "onTouchEvent: !gameSelected");
-//                        intent = new Intent(context, TutorialGameMode2.class);
-//                        context.startActivity(intent);
+                        intent = new Intent(context, TutorialGameMode2.class);
+                        context.startActivity(intent);
                     }
                 }
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {

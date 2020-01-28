@@ -9,21 +9,23 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class Utilities {
     static final String DISPLAY_TAG = "Display";
-    int screenWidth, screenHeight;
+    public static int viewOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     public int iconSeparation, optionSeparation, landSeparation;
+    int screenWidth, screenHeight;
     Context context;
-    public Paint pBold, pRegular, pRegular2, pRects, pIcons;
-    //TODO crear Paint dinámicos, para usar diferentes tamaños de pincel con mismo estilo
-//    public Paint pBold[] = new Paint[5], pRegular[] = new Paint[5];
+    public Paint pRects, pIcons;
+    public Paint pBold[] = new Paint[5], pRegular[] = new Paint[5];
     static Display display;
     static DisplayMetrics metrics;
     static Point screenSize;
@@ -40,29 +42,38 @@ public class Utilities {
         metrics = new DisplayMetrics();
 
         //Inicialización pinceles:
-        //Paint fuente gruesa
-        pBold = new Paint();
-        pBold.setColor(Color.WHITE);
-        pBold.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-bold.ttf"));
-        pBold.setTextAlign(Paint.Align.CENTER);
-        pBold.setAntiAlias(true);
+        //Paints fuente gruesa
+        for (int i = 0; i < pBold.length; i++) {
+            pBold[i] = new Paint();
+            pBold[i].setColor(Color.WHITE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                pBold[i].setTypeface(context.getResources().getFont(R.font.comfortaa_bold));
+            } else {
+                pBold[i].setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-bold.ttf"));
+            }
+            pBold[i].setAntiAlias(true);
+        }
 
-        //Paint fuente regular
-        pRegular = new Paint();
-        pRegular.setColor(Color.WHITE);
-        pRegular.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
-        pRegular.setTextAlign(Paint.Align.CENTER);
-        pRegular.setAntiAlias(true);
-        pRegular2 = new Paint();
-        pRegular2.setColor(Color.WHITE);
-        pRegular2.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
-        pRegular2.setTextAlign(Paint.Align.CENTER);
-        pRegular2.setAntiAlias(true);
+        //Paints fuente regular
+        for (int i = 0; i < pRegular.length; i++) {
+            pRegular[i] = new Paint();
+            pRegular[i].setColor(Color.WHITE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                pRegular[i].setTypeface(context.getResources().getFont(R.font.comfortaa_regular));
+            } else {
+                pRegular[i].setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
+            }
+            pRegular[i].setAntiAlias(true);
+        }
 
         //Paint iconos
         pIcons = new Paint();
         pIcons.setColor(Color.WHITE);
-        pIcons.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/icons-solid.ttf"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            pIcons.setTypeface(context.getResources().getFont(R.font.icons_solid));
+        } else {
+            pIcons.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/icons-solid.ttf"));
+        }
         pIcons.setAntiAlias(true);
 
         //Pincel para rectángulos
@@ -74,50 +85,11 @@ public class Utilities {
     }
 
     public Utilities(Context context, int screenWidth, int screenHeight) {
-        this.context = context;
+        this(context);
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         this.iconSeparation = 0;
         this.optionSeparation = 0;
-
-        //Inicializacion características pantalla:
-        display = ((Activity) context).getWindowManager().getDefaultDisplay();
-        screenSize = new Point();
-        display.getSize(screenSize);
-        metrics = new DisplayMetrics();
-
-        //Inicialización pinceles:
-        //Paint fuente gruesa
-        pBold = new Paint();
-        pBold.setColor(Color.WHITE);
-        pBold.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-bold.ttf"));
-        pBold.setTextAlign(Paint.Align.CENTER);
-        pBold.setAntiAlias(true);
-
-        //Paint fuente regular
-        pRegular = new Paint();
-        pRegular.setColor(Color.WHITE);
-        pRegular.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
-        pRegular.setTextAlign(Paint.Align.CENTER);
-        pRegular.setAntiAlias(true);
-        pRegular2 = new Paint();
-        pRegular2.setColor(Color.WHITE);
-        pRegular2.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
-        pRegular2.setTextAlign(Paint.Align.CENTER);
-        pRegular2.setAntiAlias(true);
-
-        //Paint iconos
-        pIcons = new Paint();
-        pIcons.setColor(Color.WHITE);
-        pIcons.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/icons-solid.ttf"));
-        pIcons.setAntiAlias(true);
-
-        //Pincel para rectángulos
-        pRects = new Paint();
-        pRects.setColor(Color.argb(0, 0, 0, 0));
-        pRects.setColor(Color.BLACK);
-        pRects.setStyle(Paint.Style.STROKE);
-        pRects.setStrokeWidth(2);
     }
 
     public int getPixels(float dp) {

@@ -1,5 +1,6 @@
 package com.example.untitledendlessgame;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -37,6 +38,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         working = false;
         thread = new MenuThread();
         setFocusable(true);
+        Log.i("Orientation", "public MenuSurfaceView: " + screenWidth + ":" + screenHeight);
         actualScene = new MenuScene(surfaceSceneNumber, screenWidth, screenHeight, context, orientation);
         Utilities.getScreenInfo();
     }
@@ -64,6 +66,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     }
 
     public void changeScene(int newScene) {
+        Log.i("Orientation", "changeScene into: " + screenWidth + ":" + screenHeight);
         switch (newScene) {
             case Scene.MENU:
                 actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
@@ -74,15 +77,15 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
             case Scene.TUTORIAL:
                 actualScene = new GameModeScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation, true);
                 break;
-            case Scene.ACHIEVMENTS:
-                actualScene = new CreditsScene(Scene.ACHIEVMENTS, screenWidth, screenHeight, context, orientation);
+            case Scene.ACHIEVEMENTS:
+                actualScene = new CreditsScene(Scene.ACHIEVEMENTS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.MARKERS:
                 actualScene = new CreditsScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.SETTINGS:
-//                actualScene = new CreditsScene(Scene.SETTINGS, screenWidth, screenHeight, context, orientation);
                 intent = new Intent(context, SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(intent);
                 break;
             case Scene.CREDITS:
@@ -103,6 +106,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         // o bien de tamaño o bien de forma
         screenWidth = width;
         screenHeight = height;
+        Log.i("Orientation", "surfaceChanged: " + screenWidth + ":" + screenHeight);
 //        thread.setSurfaceSize(width, height);
         if (!working) {
             thread.setWorking(true);
@@ -153,6 +157,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                         if (canvas != null) {
                             Log.i("Ori_port", orientation + "");
                             actualScene.updatePhysics();
+//                            Log.i("Orientation", "run: " + screenWidth + ":" + screenHeight);
                             actualScene.draw(canvas);
                         }
                     }

@@ -12,7 +12,7 @@ import com.example.untitledendlessgame.R;
 import com.example.untitledendlessgame.Utilities;
 
 public class Scene {
-    public static final int MENU = 0, PLAY = 1, TUTORIAL = 2, ACHIEVMENTS = 3, MARKERS = 4,
+    public static final int MENU = 0, PLAY = 1, TUTORIAL = 2, ACHIEVEMENTS = 3, MARKERS = 4,
             SETTINGS = 5, CREDITS = 6;
     int sceneNumber, screenWidth, screenHeight;
     boolean orientation;    //true -> Vertical, false -> Horizontal
@@ -64,7 +64,7 @@ public class Scene {
 
     public void draw(Canvas canvas) {
         util.iconSeparation = util.getPixels(15);
-        canvas.drawARGB(255, 196, 0, 0);
+        canvas.drawColor(context.getResources().getColor(R.color.backgorund));
         if (sceneNumber != Scene.MENU) {
             canvas.drawText(context.getString(R.string.icon_back), util.iconSeparation, util.iconSeparation +
                     util.pIcons.getTextSize(), util.pIcons);
@@ -79,7 +79,6 @@ public class Scene {
     public int onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
                 if (rBack.contains((int) event.getX(), (int) event.getY())) {
                     return Scene.MENU;
                 }
