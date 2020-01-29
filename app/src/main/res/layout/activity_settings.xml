@@ -122,6 +122,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvEffects" />
 
             <TextView
+                android:id="@+id/tvGyroscope"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="Giroscopio"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/tvVibrator" />
+
+            <TextView
                 android:id="@+id/tvLang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -133,7 +147,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/tvVibrator" />
+                app:layout_constraintTop_toBottomOf="@+id/tvGyroscope" />
 
             <TextView
                 android:id="@+id/tvThemes"
@@ -151,6 +165,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvLang" />
 
             <TextView
+                android:id="@+id/tvThemeDay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="Dia"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="@+id/Theme1"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/Theme1" />
+
+            <TextView
+                android:id="@+id/tvThemeNight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="Noche"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/Theme2"
+                app:layout_constraintTop_toBottomOf="@+id/Theme2" />
+
+            <TextView
                 android:id="@+id/tvThemeAuto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,7 +203,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/Theme1" />
+                app:layout_constraintTop_toBottomOf="@+id/tvThemeDay" />
 
             <TextView
                 android:id="@+id/tvLogin"
@@ -199,6 +240,9 @@
                 android:id="@+id/swMusic"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:checked="false"
+                android:theme="@style/SwitchTheme"
+
                 app:layout_constraintBottom_toBottomOf="@+id/tvMusic"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvMusic" />
@@ -207,22 +251,34 @@
                 android:id="@+id/swEffects"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:theme="@style/SwitchTheme"
                 app:layout_constraintBottom_toBottomOf="@+id/tvEffects"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvEffects" />
 
             <Switch
-                android:id="@+id/swVibrator"
+                android:id="@+id/swVibration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:theme="@style/SwitchTheme"
                 app:layout_constraintBottom_toBottomOf="@+id/tvVibrator"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvVibrator" />
 
             <Switch
-                android:id="@+id/swVibrator2"
+                android:id="@+id/swGyroscope"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:theme="@style/SwitchTheme"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGyroscope"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toTopOf="@+id/tvGyroscope" />
+
+            <Switch
+                android:id="@+id/swThemeAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/SwitchTheme"
                 app:layout_constraintBottom_toBottomOf="@+id/tvThemeAuto"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvThemeAuto" />
@@ -261,7 +317,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
-                android:src="@drawable/games_controller_white"
+                android:src="@drawable/ic_games_controller_white"
                 app:layout_constraintBottom_toBottomOf="@+id/tvPlayGames"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvPlayGames" />

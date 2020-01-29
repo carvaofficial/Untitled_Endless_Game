@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SwitchTheme" parent="Theme.AppCompat.Light">
+        <item name="android:thumbTint">@color/switch_colors</item>
+        <item name="android:trackTint">@color/switch_colors</item>
+    </style>
+</resources>

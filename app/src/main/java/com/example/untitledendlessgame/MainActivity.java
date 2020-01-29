@@ -1,7 +1,10 @@
 package com.example.untitledendlessgame;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +14,13 @@ import android.view.WindowManager;
 
 import com.example.untitledendlessgame.Scenes.Scene;
 
+import jonathanfinerty.once.Once;
+
+import static com.example.untitledendlessgame.Utilities.*;
+
+//TODO pendiente de pasar a strings.xml todas las cadenas del proyecto
 public class MainActivity extends AppCompatActivity {
+
     MenuSurfaceView main_menu;
     View decorationView;
 
@@ -20,13 +29,45 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         main_menu = new MenuSurfaceView(this);
         decorationView = getWindow().getDecorView();
+
+        //Configuración de decorado de la actividad
         decorationView.setSystemUiVisibility(Utilities.viewOptions);
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);    //En onResume no se coloca, salta excepción
         //Desde API 16 oculta la Status Bar (barra de estado/notificaciones)
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         main_menu.setKeepScreenOn(true);
+
         setContentView(main_menu);
+
+        //Inicialización y propiedades primeras veces
+        Once.initialise(this);
+        if (!Once.beenDone(Once.THIS_APP_INSTALL, DEFAULT_SHARED_PREFERENCES)) {
+            preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+            editor = preferences.edit();
+            editor.putBoolean("Music", true);
+            editor.putBoolean("Effects", true);
+            editor.putBoolean("Vibration", true);
+            editor.putBoolean("Gyroscope", false);
+            editor.putBoolean("ThemeAuto", false);
+            editor.putInt("Language", 0);
+            editor.commit();
+            Once.markDone(DEFAULT_SHARED_PREFERENCES);
+        }
+        if (!Once.beenDone(Once.THIS_APP_INSTALL, INITIAL_TUTORIAL)) {
+            AlertDialog.Builder beginTutorial = new AlertDialog.Builder(MainActivity.this);
+            beginTutorial.setTitle("¡Bienvenido!");
+            beginTutorial.setMessage("Parece ser que hay un nuevo jugador. ¿Deseas ver un tutorial de aprendizaje?");
+            beginTutorial.setNegativeButton("No, gracias", null);
+            beginTutorial.setPositiveButton("Si, estaría bien", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    main_menu.changeScene(Scene.TUTORIAL);
+                }
+            });
+            beginTutorial.show();
+            Once.markDone(INITIAL_TUTORIAL);
+        }
     }
 
     @Override
@@ -45,7 +86,17 @@ public class MainActivity extends AppCompatActivity {
         if (main_menu.getSurfaceSceneNumber() != Scene.MENU) {
             main_menu.changeScene(Scene.MENU);
         } else {
-            super.onBackPressed();
+            AlertDialog.Builder closeGame = new AlertDialog.Builder(MainActivity.this);
+            closeGame.setTitle("Salir del juego");
+            closeGame.setMessage("¿Está seguro que desea salir?");
+            closeGame.setNegativeButton("Volver", null);
+            closeGame.setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    MainActivity.super.onBackPressed();
+                }
+            });
+            closeGame.show();
         }
     }
 

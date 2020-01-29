@@ -43,8 +43,8 @@ public class GameModeScene extends Scene {
         pGameMode.setColor(Color.argb(0, 0, 0, 0));
 
         //Inicializacion imágenes:
-        img1 = R.drawable.gamemode1;
-        img2 = R.drawable.gamemode1;
+        img1 = R.drawable.gamemode;
+        img2 = R.drawable.gamemode;
 
         bGameMode1 = BitmapFactory.decodeResource(context.getResources(), img1);
         bGameMode2 = BitmapFactory.decodeResource(context.getResources(), img2);
@@ -238,20 +238,22 @@ public class GameModeScene extends Scene {
                 }
                 break;
             case MotionEvent.ACTION_UP:
+//            case MotionEvent.ACTION_MOVE:
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && tutorial) {
                     Log.i("GameMode", "onTouchEvent: entra rContinue");
                     if (gameSelected) {
                         Log.i("GameMode", "onTouchEvent: gameSelected");
                         intent = new Intent(context, TutorialGameMode1.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(intent);
                     }
                     if (!gameSelected) {
                         Log.i("GameMode", "onTouchEvent: !gameSelected");
                         intent = new Intent(context, TutorialGameMode2.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(intent);
                     }
-                }
-                if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {
+                }else if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {
                     Log.i("GameMode", "onTouchEvent: entra !rContinue");
                     if (gameSelected) {
                         Log.i("GameMode", "onTouchEvent: gameSelected");

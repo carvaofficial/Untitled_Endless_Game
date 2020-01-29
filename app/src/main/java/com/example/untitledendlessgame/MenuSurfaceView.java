@@ -1,6 +1,5 @@
 package com.example.untitledendlessgame;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -22,7 +21,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     Context context;
     private SurfaceHolder surfaceHolder;
     private MenuThread thread;
-    private Scene actualScene;
+    public Scene actualScene;
     private boolean working;
     private boolean orientation;
     private int screenWidth, screenHeight;

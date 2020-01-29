@@ -1,24 +1,27 @@
 package com.example.untitledendlessgame.Scenes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.R;
 import com.example.untitledendlessgame.Utilities;
+
+import static com.example.untitledendlessgame.Utilities.*;
 
 public class Scene {
     public static final int MENU = 0, PLAY = 1, TUTORIAL = 2, ACHIEVEMENTS = 3, MARKERS = 4,
             SETTINGS = 5, CREDITS = 6;
     int sceneNumber, screenWidth, screenHeight;
     boolean orientation;    //true -> Vertical, false -> Horizontal
+    boolean music, effects, vibration, gyroscope;
     Context context;
-    AudioManager sounds;
-    SoundPool effects;
     Rect rBack;
     Utilities util;
 
@@ -29,13 +32,12 @@ public class Scene {
         this.context = context;
         this.orientation = orientation;
         this.util = new Utilities(this.context, this.screenWidth, this.screenHeight);
-
-        //Inicialización sonido y efectos
-        sounds = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        SoundPool.Builder spb = new SoundPool.Builder();
-        spb.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
-        this.effects = spb.build();
+        //Inicialización booleanas Settings
+        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        this.music = preferences.getBoolean("Music", true);
+        this.effects = preferences.getBoolean("Effects", true);
+        this.vibration = preferences.getBoolean("Vibration", true);
+        this.gyroscope = preferences.getBoolean("Gyroscope", false);
 
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
