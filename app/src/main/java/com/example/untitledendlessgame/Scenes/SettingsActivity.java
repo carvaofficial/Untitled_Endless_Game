@@ -7,6 +7,7 @@ import com.example.untitledendlessgame.*;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -17,17 +18,21 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
 import static com.example.untitledendlessgame.Utilities.editor;
 import static com.example.untitledendlessgame.Utilities.preferences;
 
-//TODO setOnChecked de los switches para ajustar todos los valores al momento (sonido. musica, etc.)
+//TODO pendiente hacer clicables los ImageView, crear sus apartados en SharedPreferences e insertar
+// sus respectivas imágenes
 public class SettingsActivity extends AppCompatActivity {
     View decorationView;
     Intent intent;
@@ -35,9 +40,11 @@ public class SettingsActivity extends AppCompatActivity {
     ImageButton btnPlayGames;
     Switch swMusic, swEffects, swVibration, swGyroscope, swThemeAuto;
     Spinner spinnerLang;
-    int langSelected;
+    ImageView theme1, theme2;
     Utilities util;
     Typeface font;
+    Locale language;
+    int langSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +60,6 @@ public class SettingsActivity extends AppCompatActivity {
         util = new Utilities(this);
         intent = new Intent();
         preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        final String[] language = getResources().getStringArray(R.array.language);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, language);
 
         //Inicialización componentes
         btnBack = findViewById(R.id.btnBack);
@@ -64,7 +69,9 @@ public class SettingsActivity extends AppCompatActivity {
         swVibration = findViewById(R.id.swVibration);
         swGyroscope = findViewById(R.id.swGyroscope);
         swThemeAuto = findViewById(R.id.swThemeAuto);
-        spinnerLang = findViewById(R.id.spinnerLang);
+        theme1 = findViewById(R.id.theme1);
+        theme2 = findViewById(R.id.theme2);
+        typefacedSpinner();
 
         //Propiedades componentes
         swMusic.setChecked(preferences.getBoolean("Music", true));
@@ -72,8 +79,6 @@ public class SettingsActivity extends AppCompatActivity {
         swVibration.setChecked(preferences.getBoolean("Vibration", true));
         swGyroscope.setChecked(preferences.getBoolean("Gyroscope", false));
         swThemeAuto.setChecked(preferences.getBoolean("ThemeAuto", false));
-        spinnerLang.setAdapter(adapter);
-        spinner2meth();
         spinnerLang.setSelection(preferences.getInt("Language", 0));
         Log.i("Lang", "onCreate: " + Locale.getDefault().getDisplayLanguage());
 
@@ -88,55 +93,76 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder noService = new AlertDialog.Builder(SettingsActivity.this);
-                noService.setTitle("Servicio no disponible");
-                noService.setMessage("Servicios de Google no disponible temporalmente");
-                noService.setNeutralButton("Aceptar", null);
+                noService.setTitle(getString(R.string.service_not_avaliable));
+                noService.setMessage(getString(R.string.gservice_not_avaliable));
+                noService.setNeutralButton(getString(R.string.accept), null);
                 noService.show();
             }
         });
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        language = new Locale("es", "ES");
+                        break;
+                    case 1:
+                        language = new Locale("en", "EN");
+                        break;
+                    case 2:
+                        language = new Locale("fr", "FR");
+                        break;
+                }
                 langSelected = position;
-
+                Locale.setDefault(language);
+                Configuration config = new Configuration();
+                config.setLocale(language);
+                getBaseContext().getResources().updateConfiguration(config, getBaseContext().
+                        getResources().getDisplayMetrics());
+                //TODO preguntar a Javi como refrescar la actividad después del cambio de idioma.
+                // la función de abajo refresca, pero se ejecuta constantemente.
+//                recreate();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
-    }
-
-    //TODO mejorar esta función del Spinner (permite personalizar la fuente)
-    public void spinner2meth() {
-        Spinner mySpinner = findViewById(R.id.spinnerLang);
-        final String[] language = getResources().getStringArray(R.array.language);
-        ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, language) {
-            public View getView(int position, View convertView, android.view.ViewGroup parent) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    font = getResources().getFont(R.font.comfortaa_bold);
+        swMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    util.gameMusic.start();
                 } else {
-                    font = Typeface.createFromAsset(getAssets(), "fonts/comfortaa-regular.ttf");
+                    if (util.gameMusic.isPlaying()) util.gameMusic.stop();
                 }
-
-                TextView v = (TextView) super.getView(position, convertView, parent);
-                v.setTypeface(font);
-                v.setTextColor(Color.WHITE);
-                v.setTextSize(20);
-                return v;
             }
+        });
+        swEffects.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-            public View getDropDownView(int position, View convertView, android.view.ViewGroup parent) {
-                TextView v = (TextView) super.getView(position, convertView, parent);
-                v.setTypeface(font);
-                v.setTextColor(Color.WHITE);
-                v.setTextSize(20);
-                return v;
             }
-        };
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mySpinner.setAdapter(adapter1);
+        });
+        swVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+        swGyroscope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+        swThemeAuto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swThemeAuto.setChecked(false);
+                Toast.makeText(SettingsActivity.this, getString(R.string.theme_auto_disabled), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -160,5 +186,35 @@ public class SettingsActivity extends AppCompatActivity {
         editor.commit();
         finish();
         overridePendingTransition(0, 0);
+    }
+
+    public void typefacedSpinner() {
+        spinnerLang = findViewById(R.id.spinnerLang);
+        final String[] languages = getResources().getStringArray(R.array.languages);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, languages) {
+            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    font = getResources().getFont(R.font.comfortaa_regular);
+                } else {
+                    font = Typeface.createFromAsset(getAssets(), "fonts/comfortaa-regular.ttf");
+                }
+
+                TextView v = (TextView) super.getView(position, convertView, parent);
+                v.setTypeface(font);
+                v.setTextColor(Color.WHITE);
+                v.setTextSize(18);
+                return v;
+            }
+
+            public View getDropDownView(int position, View convertView, android.view.ViewGroup parent) {
+                TextView v = (TextView) super.getView(position, convertView, parent);
+                v.setTypeface(font);
+                v.setTextColor(Color.WHITE);
+                v.setTextSize(18);
+                return v;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLang.setAdapter(adapter);
     }
 }

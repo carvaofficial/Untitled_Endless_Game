@@ -46,13 +46,13 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         return surfaceSceneNumber;
     }
 
+    public void setOrientation(boolean orientation) {
+        this.orientation = orientation;
+    }
+
     public void setSurfaceSceneNumber(int surfaceSceneNumber) {
         this.surfaceSceneNumber = surfaceSceneNumber;
         changeScene(surfaceSceneNumber);
-    }
-
-    public void setOrientation(boolean orientation) {
-        this.orientation = orientation;
     }
 
     @Override
@@ -71,10 +71,10 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new MenuScene(Scene.MENU, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.PLAY:
-                actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation, false);
+                actualScene = new GameModeScene(Scene.PLAY, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.TUTORIAL:
-                actualScene = new GameModeScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation, true);
+                actualScene = new GameModeScene(Scene.TUTORIAL, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.ACHIEVEMENTS:
                 actualScene = new CreditsScene(Scene.ACHIEVEMENTS, screenWidth, screenHeight, context, orientation);
@@ -154,9 +154,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                     }
                     synchronized (surfaceHolder) {
                         if (canvas != null) {
-                            Log.i("Ori_port", orientation + "");
                             actualScene.updatePhysics();
-//                            Log.i("Orientation", "run: " + screenWidth + ":" + screenHeight);
                             actualScene.draw(canvas);
                         }
                     }

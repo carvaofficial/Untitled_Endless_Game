@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="language">Langue</string>
+    <string name="google_play_games">Google Play Jeux</string>
+    <string name="music">Musique</string>
+    <string name="credits">Crédits</string>
+    <string name="day">Jour</string>
+    <string name="night">Nuit</string>
+    <string name="play">Jouer</string>
+    <string name="select_gamemode">Sélectionner mode de jeu</string>
+    <string name="settings">Configuration</string>
+    <string name="login">S\'identifier</string>
+    <string name="gamemode2">Monter et monter</string>
+    <string name="gyroscope">Gyroscope</string>
+    <string name="sound_effects">Effets sonores</string>
+    <string name="start">Commencer</string>
+    <string name="theme_auto">Mode automatique</string>
+    <string name="themes">Thèmes</string>
+    <string name="tutorial">Tutoriel</string>
+    <string name="watch_tutorial">Voir tutoriel</string>
+    <string name="vibration">Vibration</string>
+    <string name="theme_auto_disabled">Le mode automatique n\'est pas disponible.</string>
+    <string name="gamemode1">Boîtes à sauter</string>
+    <string name="lang_sp">Espagnol</string>
+    <string name="lang_en">Anglais</string>
+    <string name="lang_fr">Français</string>
+    <string name="service_not_avaliable">Service non disponible</string>
+    <string name="gservice_not_avaliable">Services Google temporairement indisponibles</string>
+    <string name="accept">Accepter</string>
+    <string name="welcome_excl">¡Bienvenue!</string>
+    <string name="welcome_txt">Il semble qu\'il y ait un nouveau joueur. Voulez-vous voir un tutoriel d\'apprentissage?</string>
+    <string name="welcome_no">Non, merci</string>
+    <string name="welcome_yes">Oui, ce serait bien</string>
+    <string name="exit_game">Quittez le jeu</string>
+    <string name="exit_game_question">Êtes-vous sûr de vouloir partir?</string>
+    <string name="exit_game_no">Revenir</string>
+    <string name="exit_game_yes">Sortir</string>
+</resources>

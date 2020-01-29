@@ -18,9 +18,7 @@ import jonathanfinerty.once.Once;
 
 import static com.example.untitledendlessgame.Utilities.*;
 
-//TODO pendiente de pasar a strings.xml todas las cadenas del proyecto
 public class MainActivity extends AppCompatActivity {
-
     MenuSurfaceView main_menu;
     View decorationView;
 
@@ -56,10 +54,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!Once.beenDone(Once.THIS_APP_INSTALL, INITIAL_TUTORIAL)) {
             AlertDialog.Builder beginTutorial = new AlertDialog.Builder(MainActivity.this);
-            beginTutorial.setTitle("¡Bienvenido!");
-            beginTutorial.setMessage("Parece ser que hay un nuevo jugador. ¿Deseas ver un tutorial de aprendizaje?");
-            beginTutorial.setNegativeButton("No, gracias", null);
-            beginTutorial.setPositiveButton("Si, estaría bien", new DialogInterface.OnClickListener() {
+            beginTutorial.setTitle(getString(R.string.welcome_excl));
+            beginTutorial.setMessage(getString(R.string.welcome_txt));
+            beginTutorial.setNegativeButton(getString(R.string.welcome_no), null);
+            beginTutorial.setPositiveButton(getString(R.string.welcome_yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     main_menu.changeScene(Scene.TUTORIAL);
@@ -87,10 +85,10 @@ public class MainActivity extends AppCompatActivity {
             main_menu.changeScene(Scene.MENU);
         } else {
             AlertDialog.Builder closeGame = new AlertDialog.Builder(MainActivity.this);
-            closeGame.setTitle("Salir del juego");
-            closeGame.setMessage("¿Está seguro que desea salir?");
-            closeGame.setNegativeButton("Volver", null);
-            closeGame.setPositiveButton("Salir", new DialogInterface.OnClickListener() {
+            closeGame.setTitle(getString(R.string.exit_game));
+            closeGame.setMessage(getString(R.string.exit_game_question));
+            closeGame.setNegativeButton(getString(R.string.exit_game_no), null);
+            closeGame.setPositiveButton(getString(R.string.exit_game_yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     MainActivity.super.onBackPressed();

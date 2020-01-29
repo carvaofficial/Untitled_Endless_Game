@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="watch_tutorial">Ver tutorial</string>
+    <string name="start">Comenzar</string>
+    <string name="select_gamemode">Seleccionar modo de juego</string>
+    <string name="play">Jugar</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="credits">Créditos</string>
+    <string name="settings">Configuración</string>
+    <string name="music">Música</string>
+    <string name="sound_effects">Efectos de sonido</string>
+    <string name="vibration">Vibración</string>
+    <string name="gyroscope">Giroscopio</string>
+    <string name="language">Idioma</string>
+    <string name="themes">Temas</string>
+    <string name="theme_auto">Modo automático</string>
+    <string name="day">Dia</string>
+    <string name="night">Noche</string>
+    <string name="google_play_games">Google Play Juegos</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="gamemode2">Subiendo y subiendo</string>
+    <string name="theme_auto_disabled">El modo automático no se encuentra disponible.</string>
+    <string name="gamemode1">Saltando cajas</string>
+    <string name="lang_sp">Español</string>
+    <string name="lang_en">Inglés</string>
+    <string name="lang_fr">Francés</string>
+    <string name="service_not_avaliable">Servicio no disponible</string>
+    <string name="gservice_not_avaliable">Servicios de Google no disponible temporalmente</string>
+    <string name="accept">Aceptar</string>
+    <string name="welcome_excl">¡Bienvenido!</string>
+    <string name="welcome_txt">Parece ser que hay un nuevo jugador. ¿Deseas ver un tutorial de aprendizaje?</string>
+    <string name="welcome_no">No, gracias</string>
+    <string name="welcome_yes">Si, estaría bien</string>
+    <string name="exit_game">Salir del juego</string>
+    <string name="exit_game_question">¿Está seguro que desea salir?</string>
+    <string name="exit_game_no">Volver</string>
+    <string name="exit_game_yes">Salir</string>
+</resources>

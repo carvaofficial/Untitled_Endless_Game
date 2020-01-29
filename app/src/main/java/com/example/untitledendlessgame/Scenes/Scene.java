@@ -32,6 +32,7 @@ public class Scene {
         this.context = context;
         this.orientation = orientation;
         this.util = new Utilities(this.context, this.screenWidth, this.screenHeight);
+
         //Inicialización booleanas Settings
         preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
         this.music = preferences.getBoolean("Music", true);

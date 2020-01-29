@@ -43,7 +43,8 @@ public class MenuScene extends Scene {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         //Dibujo de textos:
-        String mainOptions[] = {"Jugar", "Tutorial", "Creditos", context.getString(R.string.icon_config),
+        String mainOptions[] = {context.getString(R.string.play), context.getString(R.string.tutorial),
+                context.getString(R.string.credits), context.getString(R.string.icon_config),
                 context.getString(R.string.icon_achievments), context.getString(R.string.icon_markers)};
         util.optionSeparation = (int) (util.pRegular[0].getTextSize() * 2 - (util.pRegular[0].getTextSize() / 5));
 
@@ -58,10 +59,10 @@ public class MenuScene extends Scene {
                 rAchievments.right, rMarkers.right};
 
         //Dibuja titulo
-        canvas.drawText("Untitled", screenWidth / 2, screenHeight / 4, util.pBold[0]);
-        canvas.drawText("Endless", screenWidth / 2, (screenHeight / 4) +
+        canvas.drawText(context.getString(R.string.untitled), screenWidth / 2, screenHeight / 4, util.pBold[0]);
+        canvas.drawText(context.getString(R.string.endless), screenWidth / 2, (screenHeight / 4) +
                 util.pBold[0].getTextSize(), util.pBold[0]);
-        canvas.drawText("Game", screenWidth / 2, (screenHeight / 4) +
+        canvas.drawText(context.getString(R.string.game), screenWidth / 2, (screenHeight / 4) +
                 (util.pBold[0].getTextSize() * 2), util.pBold[0]);
 
         //Dibuja iconos
