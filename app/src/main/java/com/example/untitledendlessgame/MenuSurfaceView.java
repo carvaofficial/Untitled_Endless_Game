@@ -3,7 +3,12 @@ package com.example.untitledendlessgame;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Build;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -14,6 +19,8 @@ import com.example.untitledendlessgame.Scenes.MenuScene;
 import com.example.untitledendlessgame.Scenes.GameModeScene;
 import com.example.untitledendlessgame.Scenes.Scene;
 import com.example.untitledendlessgame.Scenes.SettingsActivity;
+
+import static com.example.untitledendlessgame.Utilities.*;
 
 import java.util.Arrays;
 
@@ -27,6 +34,12 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     private int screenWidth, screenHeight;
     private int surfaceSceneNumber = Scene.MENU;
     Intent intent;
+    public static boolean music, effects, vibration, gyroscope;
+    public static AudioManager audioManager;
+    public static MediaPlayer gameMusic;
+    public static SoundPool gameEffects;
+    public static Vibrator vibrator;
+    static int volume;
 
     public MenuSurfaceView(Context context) {
         super(context);
@@ -37,9 +50,32 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         working = false;
         thread = new MenuThread();
         setFocusable(true);
+
+        //Inicialización música y efectos
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        gameMusic = MediaPlayer.create(context, R.raw.main_music);
+        volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        gameMusic.setVolume(volume, volume);
+
+        SoundPool.Builder builder = new SoundPool.Builder();
+        builder.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
+        gameEffects = builder.build();
+
+        //Inicialización vibrador
+        vibrator = (Vibrator) context.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+        //Inicialización booleanas Settings
+        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        music = preferences.getBoolean("Music", true);
+        effects = preferences.getBoolean("Effects", true);
+        vibration = preferences.getBoolean("Vibration", true);
+        gyroscope = preferences.getBoolean("Gyroscope", false);
+
         Log.i("Orientation", "public MenuSurfaceView: " + screenWidth + ":" + screenHeight);
         actualScene = new MenuScene(surfaceSceneNumber, screenWidth, screenHeight, context, orientation);
-        Utilities.getScreenInfo();
+
+        if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
 
     public int getSurfaceSceneNumber() {
@@ -83,6 +119,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new CreditsScene(Scene.MARKERS, screenWidth, screenHeight, context, orientation);
                 break;
             case Scene.SETTINGS:
+                intentFlag = true;
                 intent = new Intent(context, SettingsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 context.startActivity(intent);

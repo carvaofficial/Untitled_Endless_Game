@@ -20,9 +20,8 @@ public class Scene {
             SETTINGS = 5, CREDITS = 6;
     int sceneNumber, screenWidth, screenHeight;
     boolean orientation;    //true -> Vertical, false -> Horizontal
-    boolean music, effects, vibration, gyroscope;
     Context context;
-    Rect rBack;
+    private Rect rBack;
     Utilities util;
 
     Scene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
@@ -32,13 +31,6 @@ public class Scene {
         this.context = context;
         this.orientation = orientation;
         this.util = new Utilities(this.context, this.screenWidth, this.screenHeight);
-
-        //Inicialización booleanas Settings
-        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        this.music = preferences.getBoolean("Music", true);
-        this.effects = preferences.getBoolean("Effects", true);
-        this.vibration = preferences.getBoolean("Vibration", true);
-        this.gyroscope = preferences.getBoolean("Gyroscope", false);
 
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {

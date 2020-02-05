@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,8 +18,9 @@ import com.example.untitledendlessgame.Scenes.Scene;
 
 import jonathanfinerty.once.Once;
 
+import static com.example.untitledendlessgame.MenuSurfaceView.*;
 import static com.example.untitledendlessgame.Utilities.*;
-
+//TODO Once Tutorial no reaparece cuando se gira la pantalla.
 public class MainActivity extends AppCompatActivity {
     MenuSurfaceView main_menu;
     View decorationView;
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("Vibration", true);
             editor.putBoolean("Gyroscope", false);
             editor.putBoolean("ThemeAuto", false);
+            editor.putBoolean("Theme1", true);
+            editor.putBoolean("Theme2", false);
             editor.putInt("Language", 0);
             editor.commit();
             Once.markDone(DEFAULT_SHARED_PREFERENCES);
@@ -69,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (music && gameMusic.isPlaying() && !intentFlag) gameMusic.pause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         decorationView = getWindow().getDecorView();
@@ -77,6 +88,21 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         //Pasamos al SurfaceView el estado del la orientación de la pantalla
         main_menu.setOrientation(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);  //Controla el volumen si se silencia la aplicación
+
+        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (intentGame) {
+            gameMusic = MediaPlayer.create(this, R.raw.main_music);
+            gameMusic.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        gameMusic.stop();
+        gameEffects.release();
+        vibrator.cancel();
     }
 
     @Override
@@ -92,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     MainActivity.super.onBackPressed();
+                    gameMusic.stop();
+                    gameEffects.release();
+                    vibrator.cancel();
                 }
             });
             closeGame.show();

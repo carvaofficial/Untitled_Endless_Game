@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.R;
 
+import static com.example.untitledendlessgame.Utilities.*;
+
 public class MenuScene extends Scene {
     Context context;
     Rect rPlay, rTutorial, rAchievments, rMarkers, rSettings, rCredits;
@@ -37,6 +39,8 @@ public class MenuScene extends Scene {
             util.pRegular[0].setTextSize(screenWidth / 24);
         }
         util.pIcons.setTextSize(util.pRegular[0].getTextSize());
+
+
     }
 
     @Override

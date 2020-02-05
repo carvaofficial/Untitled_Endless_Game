@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,36 +29,32 @@ import android.widget.Toast;
 
 import java.util.Locale;
 
-import static com.example.untitledendlessgame.Utilities.editor;
-import static com.example.untitledendlessgame.Utilities.preferences;
+import static com.example.untitledendlessgame.MenuSurfaceView.*;
+import static com.example.untitledendlessgame.Utilities.*;
 
-//TODO pendiente hacer clicables los ImageView, crear sus apartados en SharedPreferences e insertar
-// sus respectivas imágenes
 public class SettingsActivity extends AppCompatActivity {
     View decorationView;
     Intent intent;
     Button btnBack;
-    ImageButton btnPlayGames;
+    ImageButton theme1, theme2, btnPlayGames;
     Switch swMusic, swEffects, swVibration, swGyroscope, swThemeAuto;
     Spinner spinnerLang;
-    ImageView theme1, theme2;
-    Utilities util;
     Typeface font;
-    Locale language;
-    int langSelected;
+    static Locale[] languages = {new Locale("es", "ES"), new Locale("en", "EN"),
+            new Locale("fr", "FR")};
+    private int langSelected;
+    private boolean theme1Activated, theme2Activated;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         //Configuración de decorado de la actividad
         decorationView = getWindow().getDecorView();
         decorationView.setSystemUiVisibility(Utilities.viewOptions);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        util = new Utilities(this);
         intent = new Intent();
         preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
 
@@ -79,8 +76,16 @@ public class SettingsActivity extends AppCompatActivity {
         swVibration.setChecked(preferences.getBoolean("Vibration", true));
         swGyroscope.setChecked(preferences.getBoolean("Gyroscope", false));
         swThemeAuto.setChecked(preferences.getBoolean("ThemeAuto", false));
+        theme1Activated = preferences.getBoolean("Theme1", true);
+        theme2Activated = preferences.getBoolean("Theme2", false);
         spinnerLang.setSelection(preferences.getInt("Language", 0));
         Log.i("Lang", "onCreate: " + Locale.getDefault().getDisplayLanguage());
+
+        if (theme1Activated) {
+            theme1.setImageResource(R.drawable.ic_sun_color);
+        } else if (theme2Activated) {
+            theme2.setImageResource(R.drawable.ic_moon_color);
+        }
 
         //Eventos componentes
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -102,21 +107,11 @@ public class SettingsActivity extends AppCompatActivity {
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        language = new Locale("es", "ES");
-                        break;
-                    case 1:
-                        language = new Locale("en", "EN");
-                        break;
-                    case 2:
-                        language = new Locale("fr", "FR");
-                        break;
-                }
+                Log.i("POS", "onItemSelected: " + position);
                 langSelected = position;
-                Locale.setDefault(language);
+                Locale.setDefault(languages[position]);
                 Configuration config = new Configuration();
-                config.setLocale(language);
+                config.setLocale(languages[position]);
                 getBaseContext().getResources().updateConfiguration(config, getBaseContext().
                         getResources().getDisplayMetrics());
                 //TODO preguntar a Javi como refrescar la actividad después del cambio de idioma.
@@ -132,22 +127,22 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    util.gameMusic.start();
+                    gameMusic.start();
                 } else {
-                    if (util.gameMusic.isPlaying()) util.gameMusic.stop();
+                    gameMusic.pause();
                 }
             }
         });
         swEffects.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                effects = isChecked;
             }
         });
         swVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                vibration = isChecked;
             }
         });
         swGyroscope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -163,6 +158,22 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(SettingsActivity.this, getString(R.string.theme_auto_disabled), Toast.LENGTH_SHORT).show();
             }
         });
+        theme1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                theme2Activated = false;
+                theme1.setImageResource(R.drawable.ic_sun_color);
+                theme2.setImageResource(R.drawable.ic_moon_bw);
+            }
+        });
+        theme2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                theme1Activated = false;
+                theme2.setImageResource(R.drawable.ic_moon_color);
+                theme1.setImageResource(R.drawable.ic_sun_bw);
+            }
+        });
     }
 
     @Override
@@ -172,6 +183,7 @@ public class SettingsActivity extends AppCompatActivity {
         decorationView.setSystemUiVisibility(Utilities.viewOptions);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
@@ -183,7 +195,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean("Gyroscope", swGyroscope.isChecked());
         editor.putBoolean("ThemeAuto", swThemeAuto.isChecked());
         editor.putInt("Language", langSelected);
-        editor.commit();
+        editor.apply();
         finish();
         overridePendingTransition(0, 0);
     }

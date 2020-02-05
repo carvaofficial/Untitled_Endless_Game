@@ -3,6 +3,7 @@ package com.example.untitledendlessgame;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -28,18 +30,16 @@ public class Utilities {
             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     public int iconSeparation, optionSeparation, landSeparation;
-    int screenWidth, screenHeight;
-    Context context;
+    private int screenWidth, screenHeight;
+    public static boolean intentFlag, intentGame;
+    private Context context;
     public Paint pRects, pIcons;
     public Paint pBold[] = new Paint[5], pRegular[] = new Paint[5];
-    static Display display;
-    static DisplayMetrics metrics;
-    static Point screenSize;
+    private static Display display;
+    private static DisplayMetrics metrics;
+    private static Point screenSize;
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
-    public AudioManager audioManager;
-    public MediaPlayer gameMusic;
-    public SoundPool gameEffects;
 
     public Utilities(Context context) {
         this.context = context;
@@ -93,28 +93,12 @@ public class Utilities {
         pRects.setColor(Color.BLACK);
         pRects.setStyle(Paint.Style.STROKE);
         pRects.setStrokeWidth(2);
-
-        //Inicialización música y efectos
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-//        gameMusic = MediaPlayer.create(context, );
-        int vol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-//        gameMusic.setVolume(vol, vol);
-        SoundPool.Builder builder = new SoundPool.Builder();
-        builder.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
-        gameEffects = builder.build();
-
-        //Inicialización vibrador
-
     }
 
     public Utilities(Context context, int screenWidth, int screenHeight) {
         this(context);
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        this.iconSeparation = 0;
-        this.optionSeparation = 0;
     }
 
     public int getPixels(float dp) {

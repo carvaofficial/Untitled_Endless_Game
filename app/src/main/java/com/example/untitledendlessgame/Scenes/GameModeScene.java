@@ -12,9 +12,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.Games.Game1Activity;
+import com.example.untitledendlessgame.Games.Game2Activity;
 import com.example.untitledendlessgame.R;
 import com.example.untitledendlessgame.Tutorials.TutorialGameMode1;
 import com.example.untitledendlessgame.Tutorials.TutorialGameMode2;
+
+import static com.example.untitledendlessgame.MenuSurfaceView.*;
+import static com.example.untitledendlessgame.Utilities.*;
 
 public class GameModeScene extends Scene {
     boolean tutorial, gameSelected;
@@ -227,6 +231,7 @@ public class GameModeScene extends Scene {
                 break;
             case MotionEvent.ACTION_UP:
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && tutorial) {
+                    intentFlag = true;
                     if (gameSelected) {
                         intent = new Intent(context, TutorialGameMode1.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -239,16 +244,18 @@ public class GameModeScene extends Scene {
                     }
                 }
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {
+                    intentGame = true;
                     if (gameSelected) {
                         intent = new Intent(context, Game1Activity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         context.startActivity(intent);
                     }
                     if (!gameSelected) {
-//                        intent = new Intent(context, TutorialGameMode2.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        context.startActivity(intent);
+                        intent = new Intent(context, Game2Activity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        context.startActivity(intent);
                     }
+                    if (music && gameMusic.isPlaying()) gameMusic.stop();
                 }
                 break;
         }

@@ -4,6 +4,8 @@
     <string name="icon_achievments" translatable="false">&#xf5a2;</string>
     <string name="icon_markers" translatable="false">&#xf091;</string>
     <string name="icon_back" translatable="false">&#xf060;</string>
+    <string name="icon_sun" translatable="false">&#xf185;</string>
+    <string name="icon_moon" translatable="false">&#xf186;</string>
     <string-array name="languages">
         <item>@string/lang_sp</item>
         <item>@string/lang_en</item>

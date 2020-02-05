@@ -50,6 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/btnBack" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -59,7 +60,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        android:id="@+id/nestedScrollView">
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -166,29 +167,28 @@
 
             <TextView
                 android:id="@+id/tvThemeDay"
-                android:layout_width="0dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/comfortaa_regular"
                 android:text="@string/day"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/theme1"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/theme1" />
 
             <TextView
                 android:id="@+id/tvThemeNight"
-                android:layout_width="0dp"
+                android:layout_width="130dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/comfortaa_regular"
                 android:text="@string/night"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/theme2"
                 app:layout_constraintTop_toBottomOf="@+id/theme2" />
 
             <TextView
@@ -292,30 +292,9 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvLang" />
 
-            <ImageView
-                android:id="@+id/theme1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:contentDescription="@string/day"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/tvThemes"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <ImageView
-                android:id="@+id/theme2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/night"
-                app:layout_constraintBottom_toBottomOf="@+id/theme1"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toTopOf="@+id/theme1"
-                tools:srcCompat="@tools:sample/avatars" />
-
             <ImageButton
                 android:id="@+id/btnPlayGames"
+                style="@style/Widget.AppCompat.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00FFFFFF"
@@ -324,6 +303,31 @@
                 app:layout_constraintBottom_toBottomOf="@+id/tvPlayGames"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@+id/tvPlayGames" />
+
+            <ImageButton
+                android:id="@+id/theme1"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#00FFFFFF"
+                app:layout_constraintEnd_toEndOf="@+id/tvThemeDay"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/tvThemes"
+                app:srcCompat="@drawable/ic_sun_bw" />
+
+            <ImageButton
+                android:id="@+id/theme2"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="#00FFFFFF"
+                app:layout_constraintEnd_toEndOf="@+id/tvThemeNight"
+                app:layout_constraintStart_toStartOf="@+id/tvThemeNight"
+                app:layout_constraintTop_toBottomOf="@+id/tvThemes"
+                app:srcCompat="@drawable/ic_moon_bw" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
