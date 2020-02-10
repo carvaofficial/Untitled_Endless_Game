@@ -21,9 +21,6 @@
     <string name="vibration">Vibration</string>
     <string name="theme_auto_disabled">Le mode automatique n\'est pas disponible.</string>
     <string name="gamemode1">Boîtes à sauter</string>
-    <string name="lang_sp">Espagnol</string>
-    <string name="lang_en">Anglais</string>
-    <string name="lang_fr">Français</string>
     <string name="service_not_avaliable">Service non disponible</string>
     <string name="gservice_not_avaliable">Services Google temporairement indisponibles</string>
     <string name="accept">Accepter</string>

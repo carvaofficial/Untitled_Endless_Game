@@ -4,8 +4,6 @@
     <string name="icon_achievments" translatable="false">&#xf5a2;</string>
     <string name="icon_markers" translatable="false">&#xf091;</string>
     <string name="icon_back" translatable="false">&#xf060;</string>
-    <string name="icon_sun" translatable="false">&#xf185;</string>
-    <string name="icon_moon" translatable="false">&#xf186;</string>
     <string-array name="languages">
         <item>@string/lang_sp</item>
         <item>@string/lang_en</item>
@@ -35,9 +33,9 @@
     <string name="login">Login</string>
     <string name="theme_auto_disabled">Auto mode is not available.</string>
     <string name="gamemode1">Jumpin\' boxes</string>
-    <string name="lang_sp">Spanish</string>
-    <string name="lang_en">English</string>
-    <string name="lang_fr">French</string>
+    <string name="lang_sp" translatable="false">Español</string>
+    <string name="lang_en" translatable="false">English</string>
+    <string name="lang_fr" translatable="false">Français</string>
     <string name="service_not_avaliable">Service not avaliable</string>
     <string name="gservice_not_avaliable">Google Services not temporarily available</string>
     <string name="accept">Accept</string>

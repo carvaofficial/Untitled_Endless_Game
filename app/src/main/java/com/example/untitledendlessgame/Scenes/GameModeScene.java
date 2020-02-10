@@ -29,15 +29,11 @@ public class GameModeScene extends Scene {
     Bitmap bGameMode1, bGameMode2;
     Intent intent;
 
-    public GameModeScene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
-        super(sceneNumber, screenWidth, screenHeight, context, orientation);
+    public GameModeScene(int sceneNumber, Context context, int screenWidth, int screenHeight, boolean orientation) {
+        super(sceneNumber, context, screenWidth, screenHeight, orientation);
         Log.i("Orientation", "public GameModeScene: " + screenWidth + ":" + screenHeight);
         this.gameSelected = true;
-        if (sceneNumber == Scene.TUTORIAL) {
-            this.tutorial = true;
-        } else {
-            this.tutorial = false;
-        }
+        this.tutorial = sceneNumber == Scene.TUTORIAL;
 
         //Inicializacion pinceles:
         pGMStroke = new Paint();
@@ -52,6 +48,7 @@ public class GameModeScene extends Scene {
         util.pBold[0].setTextAlign(Paint.Align.CENTER);
         util.pRegular[0].setTextAlign(Paint.Align.CENTER);
         util.pRegular[1].setTextAlign(Paint.Align.CENTER);
+
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
             util.pBold[0].setTextSize(screenWidth / 18);
@@ -85,11 +82,10 @@ public class GameModeScene extends Scene {
         } else {
             sContinue = context.getResources().getString(R.string.start);
         }
-
     }
 
     //TODO Error muy extraño: si dibujo primero los bitmaps y luego rContinue, no funciona bien la pulsación...
-    // Sin embargo, si se hace del revés funciona a la perfección. Comentarlo con Javi
+    // Sin embargo, si se hace del revés funciona a la perfección. Comentarlo con Javi y buscar solución para redibujado
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
@@ -224,14 +220,17 @@ public class GameModeScene extends Scene {
             case MotionEvent.ACTION_DOWN:
                 if (rGameMode1.contains((int) event.getX(), (int) event.getY())) {
                     gameSelected = true;
+                    if (vibration) vibrate(10);
                 }
                 if (rGameMode2.contains((int) event.getX(), (int) event.getY())) {
                     gameSelected = false;
+                    if (vibration) vibrate(10);
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && tutorial) {
                     intentFlag = true;
+                    if (vibration) vibrate(10);
                     if (gameSelected) {
                         intent = new Intent(context, TutorialGameMode1.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -244,7 +243,7 @@ public class GameModeScene extends Scene {
                     }
                 }
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {
-                    intentGame = true;
+                    if (vibration) vibrate(10);
                     if (gameSelected) {
                         intent = new Intent(context, Game1Activity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.untitledendlessgame.*;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -21,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -83,7 +83,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (theme1Activated) {
             theme1.setImageResource(R.drawable.ic_sun_color);
-        } else if (theme2Activated) {
+        }
+        if (theme2Activated) {
             theme2.setImageResource(R.drawable.ic_moon_color);
         }
 
@@ -91,16 +92,23 @@ public class SettingsActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (vibration) vibrate(10);
                 onBackPressed();
             }
         });
         btnPlayGames.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (vibration) vibrate(10);
                 AlertDialog.Builder noService = new AlertDialog.Builder(SettingsActivity.this);
                 noService.setTitle(getString(R.string.service_not_avaliable));
                 noService.setMessage(getString(R.string.gservice_not_avaliable));
-                noService.setNeutralButton(getString(R.string.accept), null);
+                noService.setNeutralButton(getString(R.string.accept), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (vibration) vibrate(10);
+                    }
+                });
                 noService.show();
             }
         });
@@ -126,6 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
         swMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (vibration) vibrate(10);
                 if (isChecked) {
                     gameMusic.start();
                 } else {
@@ -137,41 +146,48 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 effects = isChecked;
+                if (vibration) vibrate(10);
             }
         });
         swVibration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 vibration = isChecked;
+                if (vibration) vibrate(10);
             }
         });
         swGyroscope.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                if (vibration) vibrate(10);
             }
         });
         swThemeAuto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 swThemeAuto.setChecked(false);
+                if (vibration) vibrate(10);
                 Toast.makeText(SettingsActivity.this, getString(R.string.theme_auto_disabled), Toast.LENGTH_SHORT).show();
             }
         });
         theme1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                theme1Activated = true;
                 theme2Activated = false;
                 theme1.setImageResource(R.drawable.ic_sun_color);
                 theme2.setImageResource(R.drawable.ic_moon_bw);
+                if (vibration) vibrate(10);
             }
         });
         theme2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                theme2Activated = true;
                 theme1Activated = false;
                 theme2.setImageResource(R.drawable.ic_moon_color);
                 theme1.setImageResource(R.drawable.ic_sun_bw);
+                if (vibration) vibrate(10);
             }
         });
     }
@@ -194,6 +210,8 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean("Vibration", swVibration.isChecked());
         editor.putBoolean("Gyroscope", swGyroscope.isChecked());
         editor.putBoolean("ThemeAuto", swThemeAuto.isChecked());
+        editor.putBoolean("Theme1", theme1Activated);
+        editor.putBoolean("Theme2", theme2Activated);
         editor.putInt("Language", langSelected);
         editor.apply();
         finish();

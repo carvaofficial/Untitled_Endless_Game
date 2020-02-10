@@ -1,36 +1,33 @@
 package com.example.untitledendlessgame.Scenes;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.R;
 import com.example.untitledendlessgame.Utilities;
 
+import static com.example.untitledendlessgame.MenuSurfaceView.*;
 import static com.example.untitledendlessgame.Utilities.*;
 
 public class Scene {
     public static final int MENU = 0, PLAY = 1, TUTORIAL = 2, ACHIEVEMENTS = 3, MARKERS = 4,
             SETTINGS = 5, CREDITS = 6;
-    int sceneNumber, screenWidth, screenHeight;
-    boolean orientation;    //true -> Vertical, false -> Horizontal
     Context context;
     private Rect rBack;
     Utilities util;
 
-    Scene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
+    int sceneNumber, screenWidth, screenHeight;
+    boolean orientation;    //true -> Vertical, false -> Horizontal
+
+    Scene(int sceneNumber, Context context, int screenWidth, int screenHeight, boolean orientation) {
         this.sceneNumber = sceneNumber;
+        this.context = context;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
-        this.context = context;
         this.orientation = orientation;
-        this.util = new Utilities(this.context, this.screenWidth, this.screenHeight);
+        util = new Utilities(this.context, this.screenWidth, this.screenHeight);
 
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
@@ -40,17 +37,18 @@ public class Scene {
         }
 
         //Inicialización rectángulo botón atrás
-        int iconSeparation = util.getPixels(15), rBLength;
+        int rBLength;
+        util.iconSeparation = util.getPixels(15);
 
         rBack = new Rect();
         util.pIcons.getTextBounds(context.getString(R.string.icon_back), 0,
                 context.getString(R.string.icon_back).length(), rBack);
         rBLength = rBack.right;
 
-        rBack.left = iconSeparation;
-        rBack.right = iconSeparation + rBLength;
-        rBack.top = iconSeparation + util.getPixels(5);
-        rBack.bottom = iconSeparation + util.getPixels(5) + rBLength;
+        rBack.left = util.iconSeparation;
+        rBack.right = util.iconSeparation + rBLength;
+        rBack.top = util.iconSeparation + util.getPixels(5);
+        rBack.bottom = util.iconSeparation + util.getPixels(5) + rBLength;
     }
 
     public int getSceneNumber() {
@@ -58,7 +56,6 @@ public class Scene {
     }
 
     public void draw(Canvas canvas) {
-        util.iconSeparation = util.getPixels(15);
         canvas.drawColor(context.getResources().getColor(R.color.backgorund));
         if (sceneNumber != Scene.MENU) {
             canvas.drawText(context.getString(R.string.icon_back), util.iconSeparation, util.iconSeparation +
@@ -67,14 +64,11 @@ public class Scene {
         }
     }
 
-    public void updatePhysics() {
-
-    }
-
     public int onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 if (rBack.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.MENU;
                 }
         }

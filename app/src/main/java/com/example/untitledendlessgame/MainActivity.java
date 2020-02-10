@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +19,7 @@ import jonathanfinerty.once.Once;
 
 import static com.example.untitledendlessgame.MenuSurfaceView.*;
 import static com.example.untitledendlessgame.Utilities.*;
-//TODO Once Tutorial no reaparece cuando se gira la pantalla.
+
 public class MainActivity extends AppCompatActivity {
     MenuSurfaceView main_menu;
     View decorationView;
@@ -61,16 +60,24 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder beginTutorial = new AlertDialog.Builder(MainActivity.this);
             beginTutorial.setTitle(getString(R.string.welcome_excl));
             beginTutorial.setMessage(getString(R.string.welcome_txt));
-            beginTutorial.setNegativeButton(getString(R.string.welcome_no), null);
+            beginTutorial.setNegativeButton(getString(R.string.welcome_no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (vibration) vibrate(10);
+                    Once.markDone(INITIAL_TUTORIAL);
+                }
+            });
             beginTutorial.setPositiveButton(getString(R.string.welcome_yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if (vibration) vibrate(10);
                     main_menu.changeScene(Scene.TUTORIAL);
+                    Once.markDone(INITIAL_TUTORIAL);
                 }
             });
             beginTutorial.show();
-            Once.markDone(INITIAL_TUTORIAL);
         }
+        if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
 
     @Override
@@ -91,10 +98,6 @@ public class MainActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);  //Controla el volumen si se silencia la aplicación
 
         if (music && !gameMusic.isPlaying()) gameMusic.start();
-        if (intentGame) {
-            gameMusic = MediaPlayer.create(this, R.raw.main_music);
-            gameMusic.start();
-        }
     }
 
     @Override
@@ -113,10 +116,16 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder closeGame = new AlertDialog.Builder(MainActivity.this);
             closeGame.setTitle(getString(R.string.exit_game));
             closeGame.setMessage(getString(R.string.exit_game_question));
-            closeGame.setNegativeButton(getString(R.string.exit_game_no), null);
+            closeGame.setNegativeButton(getString(R.string.exit_game_no), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (vibration) vibrate(10);
+                }
+            });
             closeGame.setPositiveButton(getString(R.string.exit_game_yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if (vibration) vibrate(10);
                     MainActivity.super.onBackPressed();
                     gameMusic.stop();
                     gameEffects.release();
@@ -130,9 +139,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         // Guardamos el numero de escena mediante hashing
-//        outState.putInt("sceneNumber", 5);
         outState.putInt("sceneNumber", main_menu.getSurfaceSceneNumber());
-//        Log.i("Scene", "onSaveInstanceState: entra " + outState.getInt("sceneNumber"));
         Log.i("Orientation", "onSaveInstanceState: entra " + outState.getInt("sceneNumber"));
         super.onSaveInstanceState(outState);
     }
@@ -142,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         // Aquí se recupera el numero de escena
         super.onRestoreInstanceState(savedInstanceState);
         main_menu.setSurfaceSceneNumber(savedInstanceState.getInt("sceneNumber"));
-//        Log.i("Scene", "onRestoreInstanceState: sale " + savedInstanceState.getInt("sceneNumber"));
         Log.i("Orientation", "onRestoreInstanceState: sale " + savedInstanceState.getInt("sceneNumber"));
     }
 }

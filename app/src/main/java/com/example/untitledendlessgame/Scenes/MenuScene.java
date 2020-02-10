@@ -8,14 +8,15 @@ import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.R;
 
+import static com.example.untitledendlessgame.MenuSurfaceView.*;
 import static com.example.untitledendlessgame.Utilities.*;
 
 public class MenuScene extends Scene {
     Context context;
     Rect rPlay, rTutorial, rAchievments, rMarkers, rSettings, rCredits;
 
-    public MenuScene(int sceneNumber, int screenWidth, int screenHeight, Context context, boolean orientation) {
-        super(sceneNumber, screenWidth, screenHeight, context, orientation);
+    public MenuScene(int sceneNumber, Context context, int screenWidth, int screenHeight, boolean orientation) {
+        super(sceneNumber, context, screenWidth, screenHeight, orientation);
         this.context = context;
 
         //Inicializacion de rectángulos:
@@ -195,21 +196,27 @@ public class MenuScene extends Scene {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
                 if (rPlay.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.PLAY;
                 }
                 if (rTutorial.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.TUTORIAL;
                 }
                 if (rAchievments.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.ACHIEVEMENTS;
                 }
                 if (rMarkers.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.MARKERS;
                 }
                 if (rSettings.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.SETTINGS;
                 }
                 if (rCredits.contains((int) event.getX(), (int) event.getY())) {
+                    if (vibration) vibrate(10);
                     return Scene.CREDITS;
                 }
         }

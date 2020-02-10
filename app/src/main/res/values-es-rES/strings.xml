@@ -21,9 +21,6 @@
     <string name="gamemode2">Subiendo y subiendo</string>
     <string name="theme_auto_disabled">El modo automático no se encuentra disponible.</string>
     <string name="gamemode1">Saltando cajas</string>
-    <string name="lang_sp">Español</string>
-    <string name="lang_en">Inglés</string>
-    <string name="lang_fr">Francés</string>
     <string name="service_not_avaliable">Servicio no disponible</string>
     <string name="gservice_not_avaliable">Servicios de Google no disponible temporalmente</string>
     <string name="accept">Aceptar</string>
