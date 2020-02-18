@@ -1,49 +1,43 @@
 package com.example.untitledendlessgame.Games;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
-import com.example.untitledendlessgame.Utilities;
+import com.example.untitledendlessgame.Resources.AppConstants;
+import com.example.untitledendlessgame.Resources.Tools;
 
 import java.util.Arrays;
 
 public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+    SurfaceHolder surfaceHolder;
     Context context;
-    private SurfaceHolder surfaceHolder;
-    private GameThread thread;
-    private boolean working;
-    private boolean orientation;
-    private int screenWidth, screenHeight;
+    GameThread thread;
 
     public Game1SurfaceView(Context context) {
         super(context);
-        this.surfaceHolder = getHolder();
-        this.surfaceHolder.addCallback(this);
         this.context = context;
-
-        working = false;
-        thread = new GameThread();
+        surfaceHolder = getHolder();
+        surfaceHolder.addCallback(this);
         setFocusable(true);
-        Utilities.getScreenInfo();
-    }
-
-    public void setOrientation(boolean orientation) {
-        this.orientation = orientation;
-    }
-
-    public void updatePhysics() {
+        thread = new GameThread(surfaceHolder);
 
     }
 
-    @SuppressLint("MissingSuperCall")
     @Override
-    public void draw(Canvas canvas) {
-
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                AppConstants.getGameEngine().gameState = true;
+                AppConstants.getGameEngine().character.setVelocity(AppConstants.VELOCITY_WHEN_JUMPED);
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -56,64 +50,78 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         //Se ejecuta inmediatamente después de que la superficie de dibujo tenga cambios
         // o bien de tamaño o bien de forma
-        screenWidth = width;
-        screenHeight = height;
+        Tools.SCREEN_WIDTH = width;
+        Tools.SCREEN_HEIGHT = height;
+        AppConstants.initialize(context.getApplicationContext(), 4, -42, 12, width, height);
 
-        if (!working) {
-            thread.setWorking(true);
-            if (thread.getState() == Thread.State.NEW) {
-                thread.start();
-            }
-            if (thread.getState() == Thread.State.TERMINATED) {
-                thread = new GameThread();
-                thread.start();
-            }
+        if (!thread.isRunning()) {
+            thread = new GameThread(holder);
+            thread.start();
+        } else {
+            thread.start();
         }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         //Se ejecuta inmediatamente antes de la destrucción de la superficie de dibujo
-        thread.setWorking(false);
-        try {
-            thread.join();
-        } catch (InterruptedException ie) {
-            Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
+        if (thread.isRunning()) {
+            thread.setRunning(false);
+            boolean retry = true;
+            while (retry) {
+                try {
+                    thread.join();
+                    retry = false;
+                } catch (InterruptedException ie) {
+                    Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
+                }
+            }
         }
     }
 
+    //TODO pendiente averiguar cómo pausar el hilo cuando la actividad está en pausa, y evitar un reinicio
     class GameThread extends Thread {
+        SurfaceHolder surfaceHolder;
+        private boolean running;
+        long startTime, loopTime;
+        long DELAY = 30;
 
-        public GameThread() {
-
+        public GameThread(SurfaceHolder surfaceHolder) {
+            this.surfaceHolder = surfaceHolder;
+            setRunning(true);
         }
 
-        void setWorking(boolean flag) {
-            working = flag;
+        public boolean isRunning() {
+            return running;
         }
 
-        @Override
+        public void setRunning(boolean running) {
+            this.running = running;
+        }
+
         public void run() {
-            while (working) {
-                Canvas canvas = null;
-                try {
-                    if (!surfaceHolder.getSurface().isValid()) {
-                        continue;
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        canvas = surfaceHolder.lockHardwareCanvas();
-                    } else {
-                        canvas = surfaceHolder.lockCanvas();
-                    }
+            while (isRunning()) {
+                Canvas canvas;
+                startTime = SystemClock.uptimeMillis();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    canvas = surfaceHolder.lockHardwareCanvas();
+                } else {
+                    canvas = surfaceHolder.lockCanvas(null);
+                }
+                if (canvas != null) {
                     synchronized (surfaceHolder) {
-                        if (canvas != null) {
-                            updatePhysics();
-                            draw(canvas);
-                        }
-                    }
-                } finally {
-                    if (canvas != null) {
+                        AppConstants.getGameEngine().updateAndDrawBackground(canvas);
+                        AppConstants.getGameEngine().updateAndDrawCharacter(canvas);
+                        AppConstants.getGameEngine().updateAndDrawBoxes(canvas);
                         surfaceHolder.unlockCanvasAndPost(canvas);
+                    }
+                }
+                loopTime = SystemClock.uptimeMillis() - startTime;
+                if (loopTime < DELAY) {
+                    try {
+                        Thread.sleep(DELAY - loopTime);
+                    } catch (InterruptedException ie) {
+                        Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
                     }
                 }
             }

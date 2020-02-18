@@ -1,21 +1,19 @@
-package com.example.untitledendlessgame.Scenes;
+package com.example.untitledendlessgame.Scenes.Tutorials;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.untitledendlessgame.*;
+import com.example.untitledendlessgame.Resources.Tools;
 
 import android.media.AudioManager;
 import android.os.Bundle;
 
-import com.example.untitledendlessgame.R;
-import com.example.untitledendlessgame.Resources.Tools;
-
-public class CreditsActivity extends AppCompatActivity {
+public class TutorialGameMode2 extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Tools.manageDecorationView(this, false);
-        setContentView(R.layout.activity_credits);
-
+        setContentView(R.layout.activity_tutorial_game_mode2);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.example.untitledendlessgame.Scenes;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,13 +11,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.example.untitledendlessgame.Games.Game1Activity;
-import com.example.untitledendlessgame.Games.Game2Activity;
 import com.example.untitledendlessgame.R;
-import com.example.untitledendlessgame.Tutorials.TutorialGameMode1;
-import com.example.untitledendlessgame.Tutorials.TutorialGameMode2;
+import com.example.untitledendlessgame.Resources.Tools;
+import com.example.untitledendlessgame.Scenes.Tutorials.TutorialGameMode1;
+import com.example.untitledendlessgame.Scenes.Tutorials.TutorialGameMode2;
 
-import static com.example.untitledendlessgame.MenuSurfaceView.*;
-import static com.example.untitledendlessgame.Utilities.*;
+import static com.example.untitledendlessgame.Resources.SurfaceViewTools.*;
+import static com.example.untitledendlessgame.Resources.Tools.*;
 
 public class GameModeScene extends Scene {
     boolean tutorial, gameSelected;
@@ -27,7 +26,6 @@ public class GameModeScene extends Scene {
     Paint pGMStroke, pGameMode;
     Rect rGameMode1, rGameMode2, rGMStroke1, rGMStroke2, rContinue;
     Bitmap bGameMode1, bGameMode2;
-    Intent intent;
 
     public GameModeScene(int sceneNumber, Context context, int screenWidth, int screenHeight, boolean orientation) {
         super(sceneNumber, context, screenWidth, screenHeight, orientation);
@@ -45,19 +43,19 @@ public class GameModeScene extends Scene {
         pGameMode.setColor(Color.argb(0, 0, 0, 0));
 
         //Propiedades Paints:
-        util.pBold[0].setTextAlign(Paint.Align.CENTER);
-        util.pRegular[0].setTextAlign(Paint.Align.CENTER);
-        util.pRegular[1].setTextAlign(Paint.Align.CENTER);
+        SVTools.pBold[0].setTextAlign(Paint.Align.CENTER);
+        SVTools.pRegular[0].setTextAlign(Paint.Align.CENTER);
+        SVTools.pRegular[1].setTextAlign(Paint.Align.CENTER);
 
         //Gestión de tamaño de pinceles según orientación
         if (orientation) {
-            util.pBold[0].setTextSize(screenWidth / 18);
-            util.pRegular[0].setTextSize(screenWidth / 12);
-            util.pRegular[1].setTextSize(screenWidth / 18);
+            SVTools.pBold[0].setTextSize(screenWidth / 18);
+            SVTools.pRegular[0].setTextSize(screenWidth / 12);
+            SVTools.pRegular[1].setTextSize(screenWidth / 18);
         } else {
-            util.pBold[0].setTextSize(screenWidth / 30);
-            util.pRegular[0].setTextSize(screenWidth / 24);
-            util.pRegular[1].setTextSize(screenWidth / 30);
+            SVTools.pBold[0].setTextSize(screenWidth / 30);
+            SVTools.pRegular[0].setTextSize(screenWidth / 24);
+            SVTools.pRegular[1].setTextSize(screenWidth / 30);
         }
 
         //Inicializacion imágenes:
@@ -89,9 +87,9 @@ public class GameModeScene extends Scene {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        util.optionSeparation = (int) (util.pRegular[0].getTextSize() * 2 - (util.pRegular[0].getTextSize() / 5));
+        SVTools.optionSeparation = (int) (SVTools.pRegular[0].getTextSize() * 2 - (SVTools.pRegular[0].getTextSize() / 5));
         //Obteniendo ancho de texto
-        util.pRegular[0].getTextBounds(sContinue, 0, sContinue.length(), rContinue);
+        SVTools.pRegular[0].getTextBounds(sContinue, 0, sContinue.length(), rContinue);
         int rContinueLength = rContinue.right;
 
         if (orientation) {
@@ -112,33 +110,33 @@ public class GameModeScene extends Scene {
             //Rect rContinue
             rContinue.left = screenWidth / 2 - (rContinueLength / 2);
             rContinue.right = screenWidth / 2 + (rContinueLength / 2);
-            rContinue.top = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    - util.pRegular[0].getTextSize());
-            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + (util.optionSeparation * 2)
-                    + (util.pRegular[0].getTextSize() / 3));
+            rContinue.top = (int) (screenHeight - (screenHeight / 4) + (SVTools.optionSeparation * 2)
+                    - SVTools.pRegular[0].getTextSize());
+            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + (SVTools.optionSeparation * 2)
+                    + (SVTools.pRegular[0].getTextSize() / 3));
 
             //Dibujo de imágenes (Vertical):
             //Bitmap bGameMode1
-            bGameMode1 = util.scaleHeight(img1, screenHeight - (screenHeight / 3));
-            bGameMode1 = util.scaleWidth(img1, screenWidth - (screenWidth / 3));
+            bGameMode1 = SVTools.scaleHeight(img1, screenHeight - (screenHeight / 3));
+            bGameMode1 = SVTools.scaleWidth(img1, screenWidth - (screenWidth / 3));
 
             //Bitmap bGameMode2
-            bGameMode2 = util.scaleHeight(img2, screenHeight - (screenHeight / 3));
-            bGameMode2 = util.scaleWidth(img2, screenWidth - (screenWidth / 3));
+            bGameMode2 = SVTools.scaleHeight(img2, screenHeight - (screenHeight / 3));
+            bGameMode2 = SVTools.scaleWidth(img2, screenWidth - (screenWidth / 3));
 
             //Dibuja imágenes
             canvas.drawBitmap(bGameMode1, screenWidth / 6, screenHeight / 8, null);
             canvas.drawBitmap(bGameMode2, screenWidth / 6, screenHeight / 4 + bGameMode1.getHeight(), null);
 
             //Dibujo de textos (Vertical);
-            canvas.drawText(context.getString(R.string.select_gamemode), screenWidth / 2 + util.iconSeparation,
-                    screenHeight / 19, util.pBold[0]);
+            canvas.drawText(context.getString(R.string.select_gamemode), screenWidth / 2 + SVTools.iconSeparation,
+                    screenHeight / 19, SVTools.pBold[0]);
             canvas.drawText(sContinue, screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    (util.optionSeparation * 2), util.pRegular[0]);
-            canvas.drawText(sGameMode1, screenWidth / 2, rGameMode1.bottom + util.getPixels(40),
-                    util.pRegular[1]);
-            canvas.drawText(sGameMode2, screenWidth / 2, rGameMode2.bottom + util.getPixels(40),
-                    util.pRegular[1]);
+                    (SVTools.optionSeparation * 2), SVTools.pRegular[0]);
+            canvas.drawText(sGameMode1, screenWidth / 2, rGameMode1.bottom + SVTools.getPixels(40),
+                    SVTools.pRegular[1]);
+            canvas.drawText(sGameMode2, screenWidth / 2, rGameMode2.bottom + SVTools.getPixels(40),
+                    SVTools.pRegular[1]);
         } else {
             Log.i("Orientation", "drawLand: " + screenWidth + ":" + screenHeight);
             //Dibujo de rectángulos (Horizontal):
@@ -157,22 +155,22 @@ public class GameModeScene extends Scene {
             //Rect rContinue
             rContinue.left = screenWidth / 2 - (rContinueLength / 2);
             rContinue.right = screenWidth / 2 + (rContinueLength / 2);
-            rContinue.top = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation -
-                    util.pRegular[0].getTextSize());
-            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + util.optionSeparation +
-                    (util.pRegular[0].getTextSize() / 3));
+            rContinue.top = (int) (screenHeight - (screenHeight / 4) + SVTools.optionSeparation -
+                    SVTools.pRegular[0].getTextSize());
+            rContinue.bottom = (int) (screenHeight - (screenHeight / 4) + SVTools.optionSeparation +
+                    (SVTools.pRegular[0].getTextSize() / 3));
 
             //TODO Pequeña condición "chapucera", tratar de solucionar el problema de reescalado de Bitmaps.
             // IllegalArgumentException: width and height must be > 0
             if (screenWidth > 0 && screenHeight > 0) {
                 //Dibujo de imágenes (Horizontal):
                 //Bitmap bGameMode1
-                bGameMode1 = util.scaleHeight(img1, screenHeight / 2);
-                bGameMode1 = util.scaleWidth(img1, screenWidth / 3);
+                bGameMode1 = SVTools.scaleHeight(img1, screenHeight / 2);
+                bGameMode1 = SVTools.scaleWidth(img1, screenWidth / 3);
 
                 //Bitmap bGameMode2
-                bGameMode2 = util.scaleHeight(img2, screenHeight / 2);
-                bGameMode2 = util.scaleWidth(img2, screenWidth / 3);
+                bGameMode2 = SVTools.scaleHeight(img2, screenHeight / 2);
+                bGameMode2 = SVTools.scaleWidth(img2, screenWidth / 3);
 
                 //Dibuja imágenes
                 canvas.drawBitmap(bGameMode1, screenWidth / 12, screenHeight / 5, null);
@@ -182,13 +180,13 @@ public class GameModeScene extends Scene {
 
             //Dibujo de textos (Horizontal):
             canvas.drawText(context.getString(R.string.select_gamemode), screenWidth / 2,
-                    screenHeight / 9, util.pBold[0]);
+                    screenHeight / 9, SVTools.pBold[0]);
             canvas.drawText(sContinue, screenWidth / 2, screenHeight - (screenHeight / 4) +
-                    util.optionSeparation, util.pRegular[0]);
-            canvas.drawText(sGameMode1, rGameMode1.left + (bGameMode1.getWidth() / 2), rGameMode1.bottom + util.getPixels(40),
-                    util.pRegular[1]);
-            canvas.drawText(sGameMode2, rGameMode2.left + (bGameMode2.getWidth() / 2), rGameMode2.bottom + util.getPixels(40),
-                    util.pRegular[1]);
+                    SVTools.optionSeparation, SVTools.pRegular[0]);
+            canvas.drawText(sGameMode1, rGameMode1.left + (bGameMode1.getWidth() / 2), rGameMode1.bottom + SVTools.getPixels(40),
+                    SVTools.pRegular[1]);
+            canvas.drawText(sGameMode2, rGameMode2.left + (bGameMode2.getWidth() / 2), rGameMode2.bottom + SVTools.getPixels(40),
+                    SVTools.pRegular[1]);
         }
         //Dibuja rectángulos
         //Rect rGMStroke1
@@ -211,7 +209,7 @@ public class GameModeScene extends Scene {
         }
         canvas.drawRect(rGameMode1, pGameMode);
         canvas.drawRect(rGameMode2, pGameMode);
-        canvas.drawRect(rContinue, util.pRects);
+        canvas.drawRect(rContinue, SVTools.pRects);
     }
 
     @Override
@@ -232,27 +230,19 @@ public class GameModeScene extends Scene {
                     intentFlag = true;
                     if (vibration) vibrate(10);
                     if (gameSelected) {
-                        intent = new Intent(context, TutorialGameMode1.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        context.startActivity(intent);
+                        Tools.createIntent(context, TutorialGameMode1.class, false, false);
                     }
                     if (!gameSelected) {
-                        intent = new Intent(context, TutorialGameMode2.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        context.startActivity(intent);
+                        Tools.createIntent(context, TutorialGameMode2.class, false, false);
                     }
                 }
                 if (rContinue.contains((int) event.getX(), (int) event.getY()) && !tutorial) {
                     if (vibration) vibrate(10);
                     if (gameSelected) {
-                        intent = new Intent(context, Game1Activity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        context.startActivity(intent);
+                        Tools.createIntent(context, Game1Activity.class, false, true);
                     }
                     if (!gameSelected) {
-                        intent = new Intent(context, Game2Activity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        context.startActivity(intent);
+                        Tools.createIntent(context, Game1Activity.class, false, true);
                     }
                     if (music && gameMusic.isPlaying()) gameMusic.stop();
                 }

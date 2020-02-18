@@ -11,10 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Scenes.CreditsActivity"></activity>
-        <activity android:name=".Games.Game1Activity" />
-        <activity android:name=".Tutorials.TutorialGameMode2" />
-        <activity android:name=".Tutorials.TutorialGameMode1" />
+        <activity android:name=".Games.GameOverActivity" />
+        <activity android:name=".Scenes.CreditsActivity" />
+        <activity
+            android:name=".Games.Game1Activity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Scenes.Tutorials.TutorialGameMode2" />
+        <activity android:name=".Scenes.Tutorials.TutorialGameMode1" />
         <activity android:name=".Scenes.SettingsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

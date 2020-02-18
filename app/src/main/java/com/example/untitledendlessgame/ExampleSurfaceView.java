@@ -1,18 +1,18 @@
-package com.example.untitledendlessgame.Games;
+package com.example.untitledendlessgame;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.util.Log;
-import android.view.SurfaceHolder;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.SurfaceHolder;
 
-import com.example.untitledendlessgame.Utilities;
+import com.example.untitledendlessgame.Resources.Tools;
 
 import java.util.Arrays;
 
-public class Game2SurfaceView extends SurfaceView implements SurfaceHolder.Callback {
+public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     Context context;
     private SurfaceHolder surfaceHolder;
     private GameThread thread;
@@ -20,7 +20,7 @@ public class Game2SurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private boolean orientation;
     private int screenWidth, screenHeight;
 
-    public Game2SurfaceView(Context context) {
+    public ExampleSurfaceView(Context context) {
         super(context);
         this.surfaceHolder = getHolder();
         this.surfaceHolder.addCallback(this);
@@ -29,7 +29,7 @@ public class Game2SurfaceView extends SurfaceView implements SurfaceHolder.Callb
         working = false;
         thread = new GameThread();
         setFocusable(true);
-        Utilities.getScreenInfo();
+        Tools.getScreenInfo();
     }
 
     public void setOrientation(boolean orientation) {
@@ -40,16 +40,25 @@ public class Game2SurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     }
 
-    @SuppressLint("MissingSuperCall")
     @Override
     public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+        }
+        return true;
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //Se ejecuta inmediatamente después de la creación de la superficie de dibujo
-
     }
 
     @Override
@@ -86,6 +95,10 @@ public class Game2SurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
         public GameThread() {
 
+        }
+
+        boolean isWorking() {
+            return working;
         }
 
         void setWorking(boolean flag) {

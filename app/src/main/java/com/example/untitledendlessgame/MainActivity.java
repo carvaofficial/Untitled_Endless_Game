@@ -3,59 +3,49 @@ package com.example.untitledendlessgame;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
+import com.example.untitledendlessgame.Resources.AppConstants;
+import com.example.untitledendlessgame.Resources.Tools;
 import com.example.untitledendlessgame.Scenes.Scene;
 
 import jonathanfinerty.once.Once;
 
-import static com.example.untitledendlessgame.MenuSurfaceView.*;
-import static com.example.untitledendlessgame.Utilities.*;
+import static com.example.untitledendlessgame.Resources.SurfaceViewTools.*;
+import static com.example.untitledendlessgame.Resources.Tools.*;
 
 public class MainActivity extends AppCompatActivity {
     MenuSurfaceView main_menu;
-    View decorationView;
+    static final String DEFAULT_SHARED_PREFERENCES = "DSP",
+            INITIAL_TUTORIAL = "IT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        main_menu = new MenuSurfaceView(this);
-        decorationView = getWindow().getDecorView();
-
-        //Configuración de decorado de la actividad
-        decorationView.setSystemUiVisibility(Utilities.viewOptions);
-        getWindow().requestFeature(Window.FEATURE_NO_TITLE);    //En onResume no se coloca, salta excepción
-        //Desde API 16 oculta la Status Bar (barra de estado/notificaciones)
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        main_menu.setKeepScreenOn(true);
-
-        setContentView(main_menu);
-
-        //Inicialización y propiedades primeras veces
+        //Se inicializa antes de dibujar el SurfaceView y resto, para evitar NullPointer en otros
+        // sitios donde se utiliza esta clase
         Once.initialise(this);
+        //Primera vez SharedPreferences
         if (!Once.beenDone(Once.THIS_APP_INSTALL, DEFAULT_SHARED_PREFERENCES)) {
-            preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
-            editor = preferences.edit();
-            editor.putBoolean("Music", true);
-            editor.putBoolean("Effects", true);
-            editor.putBoolean("Vibration", true);
-            editor.putBoolean("Gyroscope", false);
-            editor.putBoolean("ThemeAuto", false);
-            editor.putBoolean("Theme1", true);
-            editor.putBoolean("Theme2", false);
-            editor.putInt("Language", 0);
-            editor.commit();
+            Tools.defaultPreferences(this);
             Once.markDone(DEFAULT_SHARED_PREFERENCES);
         }
+
+        //Configuración de decorado de la actividad
+        Tools.manageDecorationView(this, true);
+
+        //Inicializacion características pantalla:
+        Tools.initializeMetrics(this);
+
+        main_menu = new MenuSurfaceView(this);
+        main_menu.setKeepScreenOn(true);
+        setContentView(main_menu);
+
+        //Primera vez Ver Tutorial
         if (!Once.beenDone(Once.THIS_APP_INSTALL, INITIAL_TUTORIAL)) {
             AlertDialog.Builder beginTutorial = new AlertDialog.Builder(MainActivity.this);
             beginTutorial.setTitle(getString(R.string.welcome_excl));
@@ -77,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             });
             beginTutorial.show();
         }
+
         if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
 
@@ -89,23 +80,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        decorationView = getWindow().getDecorView();
-        decorationView.setSystemUiVisibility(Utilities.viewOptions);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Tools.manageDecorationView(this, false);
         //Pasamos al SurfaceView el estado del la orientación de la pantalla
         main_menu.setOrientation(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);  //Controla el volumen si se silencia la aplicación
+
+        //Controla el volumen si se silencia la aplicación
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        gameMusic.stop();
-        gameEffects.release();
-        vibrator.cancel();
+    protected void onRestart() {
+        super.onRestart();
+        if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
 
     @Override

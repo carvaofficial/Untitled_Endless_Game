@@ -1,19 +1,14 @@
 package com.example.untitledendlessgame;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.os.Build;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
+import com.example.untitledendlessgame.Resources.Tools;
 import com.example.untitledendlessgame.Scenes.CreditsActivity;
 import com.example.untitledendlessgame.Scenes.CreditsScene;
 import com.example.untitledendlessgame.Scenes.MenuScene;
@@ -21,23 +16,25 @@ import com.example.untitledendlessgame.Scenes.GameModeScene;
 import com.example.untitledendlessgame.Scenes.Scene;
 import com.example.untitledendlessgame.Scenes.SettingsActivity;
 
-import static com.example.untitledendlessgame.Utilities.*;
+import static com.example.untitledendlessgame.Resources.SurfaceViewTools.*;
 
 import java.util.Arrays;
-//TODO al cambiar la orientación de la pantalla la música vuelve a comenzar de 0... Algún problema
-// con surfaceDestroyed o onDestroy el MainActivity. Revisar con paciencia.
+
+import jonathanfinerty.once.Once;
+
+//TODO al cambiar la orientación de la pantalla la música se pausa. Problema en el ciclo de vida
+// del MainActivity. Se ejecutan los métodos onPause, onStop, onDestoy, onCreate y onResume (en dicho orden)
+// y al pasar por onPause pausa la música... Revisar con paciencia.
 public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     Context context;
     private SurfaceHolder surfaceHolder;
     private MenuThread thread;
     public Scene actualScene;
-    Intent intent;
 
-    private boolean working;
+    static final String INITIALIZE_HARDWARE = "IH";
+    private boolean working, orientation;
     private int screenWidth, screenHeight;
-    private boolean orientation;
     private int surfaceSceneNumber = Scene.MENU;
-    public static boolean music, effects, vibration, gyroscope;
 
     public MenuSurfaceView(Context context) {
         super(context);
@@ -50,28 +47,16 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         setFocusable(true);
 
         //Inicialización booleanas Settings
-        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        music = preferences.getBoolean("Music", true);
-        effects = preferences.getBoolean("Effects", true);
-        vibration = preferences.getBoolean("Vibration", true);
-        gyroscope = preferences.getBoolean("Gyroscope", false);
+        Tools.establishPreferences(this.context);
 
-        //Inicialización música y efectos
-        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        gameMusic = MediaPlayer.create(context, R.raw.main_music);
-        gameMusic.setVolume(volume, volume);
-
-        SoundPool.Builder builder = new SoundPool.Builder();
-        builder.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
-        gameEffects = builder.build();
-
-        //Inicialización vibración
-        vibrator = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (!Once.beenDone(Once.THIS_APP_SESSION, INITIALIZE_HARDWARE)) {
+            Tools.initializeHardware(this.context);
+            Once.markDone(INITIALIZE_HARDWARE);
+        }
 
         Log.i("Orientation", "public MenuSurfaceView: " + screenWidth + ":" + screenHeight);
         actualScene = new MenuScene(surfaceSceneNumber, context, screenWidth, screenHeight, orientation);
+        Tools.getScreenInfo();
     }
 
     public int getSurfaceSceneNumber() {
@@ -116,15 +101,11 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 break;
             case Scene.SETTINGS:
                 intentFlag = true;
-                intent = new Intent(context, SettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(intent);
+                Tools.createIntent(context, SettingsActivity.class, false, false);
                 break;
             case Scene.CREDITS:
                 intentFlag = true;
-                intent = new Intent(context, CreditsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                context.startActivity(intent);
+                Tools.createIntent(context, CreditsActivity.class, false, false);
                 break;
         }
         this.surfaceSceneNumber = actualScene.getSceneNumber();
@@ -139,11 +120,14 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         //Se ejecuta inmediatamente después de que la superficie de dibujo tenga cambios
         // o bien de tamaño o bien de forma
+        Tools.SCREEN_WIDTH = width;
+        Tools.SCREEN_HEIGHT = height;
+
         screenWidth = width;
         screenHeight = height;
         Log.i("Orientation", "surfaceChanged: " + screenWidth + ":" + screenHeight);
 //        thread.setSurfaceSize(width, height);
-        if (!working) {
+        if (!thread.isWorking()) {
             thread.setWorking(true);
             if (thread.getState() == Thread.State.NEW) {
                 thread.start();
@@ -159,16 +143,22 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         //Se ejecuta inmediatamente antes de la destrucción de la superficie de dibujo
-        thread.setWorking(false);
-        try {
-            thread.join();
-        } catch (InterruptedException ie) {
-            Log.e("Thread Exception: ", Arrays.toString(ie.getStackTrace()));
+        if (thread.isWorking()) {
+            thread.setWorking(false);
+            try {
+                thread.join();
+            } catch (InterruptedException ie) {
+                Log.e("Thread Exception: ", Arrays.toString(ie.getStackTrace()));
+            }
         }
     }
 
     class MenuThread extends Thread {
         MenuThread() {
+        }
+
+        boolean isWorking() {
+            return working;
         }
 
         void setWorking(boolean flag) {
@@ -177,7 +167,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
 
         @Override
         public void run() {
-            while (working) {
+            while (isWorking()) {
                 Canvas canvas = null;
                 try {
                     if (!surfaceHolder.getSurface().isValid()) {

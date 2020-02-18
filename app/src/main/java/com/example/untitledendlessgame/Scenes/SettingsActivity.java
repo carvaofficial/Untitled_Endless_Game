@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.untitledendlessgame.*;
+import com.example.untitledendlessgame.Resources.Tools;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -16,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,11 +30,9 @@ import android.widget.Toast;
 import java.util.Locale;
 
 import static com.example.untitledendlessgame.MenuSurfaceView.*;
-import static com.example.untitledendlessgame.Utilities.*;
+import static com.example.untitledendlessgame.Resources.Tools.*;
 
 public class SettingsActivity extends AppCompatActivity {
-    View decorationView;
-    Intent intent;
     Button btnBack;
     ImageButton theme1, theme2, btnPlayGames;
     Switch swMusic, swEffects, swVibration, swGyroscope, swThemeAuto;
@@ -50,12 +48,8 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         //Configuración de decorado de la actividad
-        decorationView = getWindow().getDecorView();
-        decorationView.setSystemUiVisibility(Utilities.viewOptions);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Tools.manageDecorationView(this, false);
 
-        intent = new Intent();
         preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
 
         //Inicialización componentes
@@ -195,10 +189,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        decorationView = getWindow().getDecorView();
-        decorationView.setSystemUiVisibility(Utilities.viewOptions);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Tools.manageDecorationView(this, false);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
