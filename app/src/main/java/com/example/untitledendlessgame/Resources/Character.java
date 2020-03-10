@@ -12,7 +12,7 @@ public class Character {
         Y = Tools.SCREEN_HEIGHT / 2 - AppConstants.getBitmapBank().getCharacterHeight() / 2;
         currentFrame = 0;
         velocity = 0;
-        this.maxFrame = maxFrame;
+        Character.maxFrame = maxFrame;
         collision = new Rect();
     }
 

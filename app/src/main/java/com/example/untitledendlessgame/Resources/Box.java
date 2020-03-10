@@ -64,7 +64,7 @@ public class Box {
         this.collisions[pos] = collision;
     }
 
-    //TODO si lo de GameEngine no funciona, tratar de traer el Bitmap aqui y utilizar estas funcoones
+    //FIXME si lo de GameEngine no funciona, tratar de traer el Bitmap aqui y utilizar estas funcoones
 //    public void actualizaRec() {
 //        collisions = new Rect(getX(), offsetY, getX() + imagen.getWidth(), offsetY + imagen.getHeight());
 //    }

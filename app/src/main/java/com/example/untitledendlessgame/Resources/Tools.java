@@ -21,23 +21,34 @@ import android.view.WindowManager;
 
 import com.example.untitledendlessgame.R;
 
+import jonathanfinerty.once.Once;
+
 public class Tools {
-    private static final String DISPLAY_TAG = "Display";
+    //Metrics and Display tools
     public static WindowManager windowManager;
     public static Display display;
     public static DisplayMetrics metrics;
     public static Point screenSize;
     public static int SCREEN_WIDTH, SCREEN_HEIGHT;
 
+    //Shared Preferences
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
+
+    //Hardware tools
     public static Vibrator vibrator;
     public static AudioManager audioManager;
     public static MediaPlayer gameMusic;
     public static SoundPool gameEffects;
     private static int volume;
-    public static boolean music, effects, vibration, gyroscope;
 
+    public static boolean music, effects, vibration, gyroscope, theme1, theme2, themeAuto;
+    public static int MENU_MUSIC = R.raw.main_music, GAME_MUSIC = R.raw.main_music; //Music resources
+
+    //Tags for Once
+    public static final String TIMER = "Timer";
+
+    //General Intent tool
     public static Intent intent;
 
     public static void initializeMetrics(Context context) {
@@ -46,11 +57,11 @@ public class Tools {
         screenSize = new Point();
         display.getSize(Tools.screenSize);
         metrics = new DisplayMetrics();
-//        display.getMetrics(metrics);
         display.getRealMetrics(metrics);
     }
 
     public static void getScreenInfo() {
+        String DISPLAY_TAG = "Display";
         Log.i(DISPLAY_TAG, "Nombre: " + display.getName());
         Log.i(DISPLAY_TAG, String.format("Width: %d\nHeight: %d", screenSize.x, screenSize.y));
         Log.i(DISPLAY_TAG, String.format("Width (px): %d\nHeight (px): %d", metrics.widthPixels, metrics.heightPixels));
@@ -71,7 +82,7 @@ public class Tools {
         editor.putBoolean("Theme1", true);
         editor.putBoolean("Theme2", false);
         editor.putInt("Language", 0);
-        editor.commit();
+        editor.apply();
     }
 
     public static void establishPreferences(Context context) {
@@ -80,13 +91,16 @@ public class Tools {
         effects = preferences.getBoolean("Effects", true);
         vibration = preferences.getBoolean("Vibration", true);
         gyroscope = preferences.getBoolean("Gyroscope", false);
+        themeAuto = preferences.getBoolean("ThemeAuto", false);
+        theme1 = preferences.getBoolean("Theme1", true);
+        theme2 = preferences.getBoolean("Theme2", false);
     }
 
-    public static void initializeHardware(Context context) {
+    public static void initializeHardware(Context context, int music) {
         //Inicialización música y efectos
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        gameMusic = MediaPlayer.create(context, R.raw.main_music);
+        gameMusic = MediaPlayer.create(context, music);
         gameMusic.setVolume(volume, volume);
 
         SoundPool.Builder builder = new SoundPool.Builder();
@@ -99,10 +113,12 @@ public class Tools {
     }
 
     public static void vibrate(int miliseconds) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            vibrator.vibrate(VibrationEffect.createOneShot(miliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
-        } else {
-            vibrator.vibrate(miliseconds);
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                vibrator.vibrate(VibrationEffect.createOneShot(miliseconds, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(miliseconds);
+            }
         }
     }
 
@@ -133,5 +149,10 @@ public class Tools {
         if (finishActivity) {
             ((Activity) context).finish();
         }
+    }
+
+    public static void reDoOnce(String tag) {
+        Once.clearDone(tag);
+        Once.toDo(tag);
     }
 }

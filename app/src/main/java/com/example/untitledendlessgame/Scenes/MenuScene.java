@@ -38,8 +38,6 @@ public class MenuScene extends Scene {
             SVTools.pRegular[0].setTextSize(screenWidth / 24);
         }
         SVTools.pIcons.setTextSize(SVTools.pRegular[0].getTextSize());
-
-
     }
 
     @Override
@@ -191,32 +189,31 @@ public class MenuScene extends Scene {
 
     @Override
     public int onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                if (rPlay.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.PLAY;
-                }
-                if (rTutorial.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.TUTORIAL;
-                }
-                if (rAchievments.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.ACHIEVEMENTS;
-                }
-                if (rMarkers.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.MARKERS;
-                }
-                if (rSettings.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.SETTINGS;
-                }
-                if (rCredits.contains((int) event.getX(), (int) event.getY())) {
-                    if (vibration) vibrate(10);
-                    return Scene.CREDITS;
-                }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (rPlay.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.PLAY;
+            }
+            if (rTutorial.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.TUTORIAL;
+            }
+            if (rAchievments.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.ACHIEVEMENTS;
+            }
+            if (rMarkers.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.MARKERS;
+            }
+            if (rSettings.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.SETTINGS;
+            }
+            if (rCredits.contains((int) event.getX(), (int) event.getY())) {
+                if (vibration) vibrate(10);
+                return Scene.CREDITS;
+            }
         }
         return sceneNumber;
     }

@@ -9,7 +9,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.untitledendlessgame.Resources.AppConstants;
 import com.example.untitledendlessgame.Resources.Tools;
 import com.example.untitledendlessgame.Scenes.Scene;
 
@@ -20,7 +19,7 @@ import static com.example.untitledendlessgame.Resources.Tools.*;
 
 public class MainActivity extends AppCompatActivity {
     MenuSurfaceView main_menu;
-    static final String DEFAULT_SHARED_PREFERENCES = "DSP",
+    final String DEFAULT_SHARED_PREFERENCES = "DSP",
             INITIAL_TUTORIAL = "IT";
 
     @Override
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         //Configuración de decorado de la actividad
         Tools.manageDecorationView(this, true);
 
-        //Inicializacion características pantalla:
+        //Inicializacion características pantalla
         Tools.initializeMetrics(this);
 
         main_menu = new MenuSurfaceView(this);
@@ -67,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
             });
             beginTutorial.show();
         }
+
+        //Reestablecer Once's de los juegos
+        Tools.reDoOnce(Tools.TIMER);
 
         if (music && !gameMusic.isPlaying()) gameMusic.start();
     }
@@ -98,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (main_menu.getSurfaceSceneNumber() != Scene.MENU) {
+        if (main_menu.getSVSceneNumber() != Scene.MENU) {
             main_menu.changeScene(Scene.MENU);
         } else {
             AlertDialog.Builder closeGame = new AlertDialog.Builder(MainActivity.this);
@@ -126,17 +128,17 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        // Guardamos el numero de escena mediante hashing
-        outState.putInt("sceneNumber", main_menu.getSurfaceSceneNumber());
+        // Guardamos el número de escena mediante hashing
+        outState.putInt("sceneNumber", main_menu.getSVSceneNumber());
         Log.i("Orientation", "onSaveInstanceState: entra " + outState.getInt("sceneNumber"));
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Aquí se recupera el numero de escena
+        // Aquí se recupera el número de escena
         super.onRestoreInstanceState(savedInstanceState);
-        main_menu.setSurfaceSceneNumber(savedInstanceState.getInt("sceneNumber"));
+        main_menu.setSVSceneNumber(savedInstanceState.getInt("sceneNumber"));
         Log.i("Orientation", "onRestoreInstanceState: sale " + savedInstanceState.getInt("sceneNumber"));
     }
 }

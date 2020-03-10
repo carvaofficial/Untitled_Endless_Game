@@ -8,7 +8,6 @@ import com.example.untitledendlessgame.Resources.Tools;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -109,13 +108,11 @@ public class SettingsActivity extends AppCompatActivity {
         spinnerLang.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("POS", "onItemSelected: " + position);
                 langSelected = position;
-                Locale.setDefault(languages[position]);
-                Configuration config = new Configuration();
+                Configuration config = getResources().getConfiguration();
                 config.setLocale(languages[position]);
-                getBaseContext().getResources().updateConfiguration(config, getBaseContext().
-                        getResources().getDisplayMetrics());
+                createConfigurationContext(config);
+                getResources().updateConfiguration(config, metrics);
                 //TODO preguntar a Javi como refrescar la actividad después del cambio de idioma.
                 // la función de abajo refresca, pero se ejecuta constantemente.
 //                recreate();
@@ -128,7 +125,9 @@ public class SettingsActivity extends AppCompatActivity {
         swMusic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                music = isChecked;
                 if (vibration) vibrate(10);
+                //TODO tratar de pasar a operación ternaria
                 if (isChecked) {
                     gameMusic.start();
                 } else {
@@ -205,6 +204,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean("Theme2", theme2Activated);
         editor.putInt("Language", langSelected);
         editor.apply();
+        Tools.establishPreferences(this);
         finish();
         overridePendingTransition(0, 0);
     }
@@ -237,5 +237,13 @@ public class SettingsActivity extends AppCompatActivity {
         };
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLang.setAdapter(adapter);
+    }
+
+    //FIXME Revisar
+    public void changeLanguage(String langCode) {
+        Configuration conf = getResources().getConfiguration();
+        conf.setLocale(new Locale(langCode.toLowerCase()));
+        createConfigurationContext(conf);
+        getResources().updateConfiguration(conf, metrics);
     }
 }

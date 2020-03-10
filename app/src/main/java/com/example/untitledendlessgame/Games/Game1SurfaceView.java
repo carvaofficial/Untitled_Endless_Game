@@ -3,6 +3,7 @@ package com.example.untitledendlessgame.Games;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,10 +15,14 @@ import com.example.untitledendlessgame.Resources.Tools;
 
 import java.util.Arrays;
 
+import jonathanfinerty.once.Once;
+
 public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread thread;
+    CountDownTimer countDown;
+    private boolean runBoxes;
 
     public Game1SurfaceView(Context context) {
         super(context);
@@ -27,15 +32,32 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
         setFocusable(true);
         thread = new GameThread(surfaceHolder);
 
+        //CountDownTimer para lanzar las cajas
+        runBoxes = false;
+        countDown = new CountDownTimer(4000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                runBoxes = true;
+            }
+        };
+
+        Tools.initializeHardware(this.context, Tools.GAME_MUSIC);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                AppConstants.getGameEngine().gameState = true;
-                AppConstants.getGameEngine().character.setVelocity(AppConstants.VELOCITY_WHEN_JUMPED);
-                break;
+        if (event.getAction() == MotionEvent.ACTION_DOWN && AppConstants.getGameEngine().isRunning()) {
+            AppConstants.getGameEngine().setGameState(true);
+            AppConstants.getGameEngine().character.setVelocity(AppConstants.VELOCITY_WHEN_JUMPED);
+            if (!Once.beenDone(Tools.TIMER)) {
+                countDown.start();
+                Once.markDone(Tools.TIMER);
+            }
         }
         return true;
     }
@@ -43,7 +65,12 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //Se ejecuta inmediatamente después de la creación de la superficie de dibujo
-
+        if (!thread.isRunning()) {
+            thread = new GameThread(holder);
+            thread.start();
+        } else {
+            thread.start();
+        }
     }
 
     @Override
@@ -52,14 +79,6 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
         // o bien de tamaño o bien de forma
         Tools.SCREEN_WIDTH = width;
         Tools.SCREEN_HEIGHT = height;
-        AppConstants.initialize(context.getApplicationContext(), 4, -42, 12, width, height);
-
-        if (!thread.isRunning()) {
-            thread = new GameThread(holder);
-            thread.start();
-        } else {
-            thread.start();
-        }
     }
 
     @Override
@@ -82,48 +101,68 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
     //TODO pendiente averiguar cómo pausar el hilo cuando la actividad está en pausa, y evitar un reinicio
     class GameThread extends Thread {
         SurfaceHolder surfaceHolder;
-        private boolean running;
+        private boolean running, suspend;
         long startTime, loopTime;
         long DELAY = 30;
 
-        public GameThread(SurfaceHolder surfaceHolder) {
+        GameThread(SurfaceHolder surfaceHolder) {
             this.surfaceHolder = surfaceHolder;
             setRunning(true);
         }
 
-        public boolean isRunning() {
+        boolean isRunning() {
             return running;
         }
 
-        public void setRunning(boolean running) {
+        void setRunning(boolean running) {
             this.running = running;
         }
 
         public void run() {
-            while (isRunning()) {
-                Canvas canvas;
-                startTime = SystemClock.uptimeMillis();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    canvas = surfaceHolder.lockHardwareCanvas();
-                } else {
-                    canvas = surfaceHolder.lockCanvas(null);
-                }
-                if (canvas != null) {
-                    synchronized (surfaceHolder) {
-                        AppConstants.getGameEngine().updateAndDrawBackground(canvas);
-                        AppConstants.getGameEngine().updateAndDrawCharacter(canvas);
-                        AppConstants.getGameEngine().updateAndDrawBoxes(canvas);
-                        surfaceHolder.unlockCanvasAndPost(canvas);
+            try {
+                while (isRunning()) {
+                    Canvas canvas;
+                    startTime = SystemClock.uptimeMillis();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        canvas = surfaceHolder.lockHardwareCanvas();
+                    } else {
+                        canvas = surfaceHolder.lockCanvas(null);
                     }
-                }
-                loopTime = SystemClock.uptimeMillis() - startTime;
-                if (loopTime < DELAY) {
-                    try {
+                    if (canvas != null) {
+                        synchronized (surfaceHolder) {
+                            while (suspend) {
+                                surfaceHolder.wait();
+                            }
+                            AppConstants.getGameEngine().updateAndDrawBackground(canvas);
+                            if (runBoxes) {
+                                AppConstants.getGameEngine().updateAndDrawBoxes(canvas);
+                            }
+                            AppConstants.getGameEngine().updateandDrawScore(canvas);
+                            AppConstants.getGameEngine().updateAndDrawCharacter(canvas);
+                            surfaceHolder.unlockCanvasAndPost(canvas);
+                        }
+                    }
+                    loopTime = SystemClock.uptimeMillis() - startTime;
+                    if (loopTime < DELAY) {
                         Thread.sleep(DELAY - loopTime);
-                    } catch (InterruptedException ie) {
-                        Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
                     }
                 }
+            } catch (InterruptedException ie) {
+                Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
+            }
+        }
+
+        void suspendThread() {
+            synchronized (surfaceHolder) {
+                suspend = true;
+                surfaceHolder.notifyAll();
+            }
+        }
+
+        void resumeThread() {
+            synchronized (surfaceHolder) {
+                suspend = false;
+                surfaceHolder.notifyAll();
             }
         }
     }

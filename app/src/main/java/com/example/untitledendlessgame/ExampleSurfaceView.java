@@ -15,9 +15,8 @@ import java.util.Arrays;
 public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     Context context;
     private SurfaceHolder surfaceHolder;
-    private GameThread thread;
-    private boolean working;
-    private boolean orientation;
+    private SVThread thread;
+    private boolean working, orientation;
     private int screenWidth, screenHeight;
 
     public ExampleSurfaceView(Context context) {
@@ -27,7 +26,7 @@ public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Cal
         this.context = context;
 
         working = false;
-        thread = new GameThread();
+        thread = new SVThread();
         setFocusable(true);
         Tools.getScreenInfo();
     }
@@ -74,7 +73,7 @@ public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Cal
                 thread.start();
             }
             if (thread.getState() == Thread.State.TERMINATED) {
-                thread = new GameThread();
+                thread = new SVThread();
                 thread.start();
             }
         }
@@ -91,9 +90,9 @@ public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Cal
         }
     }
 
-    class GameThread extends Thread {
+    class SVThread extends Thread {
 
-        public GameThread() {
+        public SVThread() {
 
         }
 
@@ -131,5 +130,13 @@ public class ExampleSurfaceView extends SurfaceView implements SurfaceHolder.Cal
                 }
             }
         }
+
+//        public void setSurfaceSize(int width, int height) {
+//            synchronized (surfaceHolder) {
+//                if (background != null) {
+//                    background = Bitmap.createScaledBitmap(background, width, height, true);
+//                }
+//            }
+//        }
     }
 }

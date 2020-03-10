@@ -3,7 +3,6 @@ package com.example.untitledendlessgame.Resources;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
 import android.util.Log;
 
 import com.example.untitledendlessgame.R;
@@ -13,14 +12,21 @@ public class BitmapBank {
     Bitmap[] character;
     Bitmap boxTop, boxBottom, boxLeft, boxRight;
     Bitmap whiteBoxTop, whiteBoxBottom, whiteBoxLeft, whiteBoxRight;
-    private int screenWidth, screenHeight;
+    int screenWidth, screenHeight;
+    private int img;
 
     public BitmapBank(Resources resource, int screenWidth, int screenHeight) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
-        background = BitmapFactory.decodeResource(resource, R.drawable.background);
-        background = scaleImage(background);
+        if (Tools.theme1) {
+            img = R.drawable.background1;
+        }
+        if (Tools.theme2) {
+            img = R.drawable.background2;
+        }
+        background = BitmapFactory.decodeResource(resource, img);
+        background = AppConstants.SVTools.scaleHeight(img, screenHeight);
 
         character = new Bitmap[6];
         for (int i = 0; i < character.length; i++) {

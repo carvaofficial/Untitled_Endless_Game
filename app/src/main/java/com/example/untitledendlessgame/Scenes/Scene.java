@@ -46,7 +46,7 @@ public class Scene {
         rBack.left = SVTools.iconSeparation;
         rBack.right = SVTools.iconSeparation + rBLength;
         rBack.top = SVTools.iconSeparation + SVTools.getPixels(5);
-        rBack.bottom = SVTools.iconSeparation + SVTools.getPixels(5) + rBLength;
+        rBack.bottom = SVTools.iconSeparation + SVTools.getPixels(7) + rBLength;
     }
 
     public int getSceneNumber() {
@@ -63,12 +63,11 @@ public class Scene {
     }
 
     public int onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                if (rBack.contains((int) event.getX(), (int) event.getY())) {
-                    if (Tools.vibration) Tools.vibrate(10);
-                    return Scene.MENU;
-                }
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (rBack.contains((int) event.getX(), (int) event.getY())) {
+                if (Tools.vibration) Tools.vibrate(10);
+                return Scene.MENU;
+            }
         }
         return sceneNumber;
     }

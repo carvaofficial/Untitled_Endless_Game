@@ -5,9 +5,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class AppConstants {
-    public static SurfaceViewTools SVTools;
-    static BitmapBank bitmapBank;
-    static GameEngine gameEngine;
+    static SurfaceViewTools SVTools;
+    private static BitmapBank bitmapBank;
+    private static GameEngine gameEngine;
     public static int VELOCITY_WHEN_JUMPED;
     static int gravity;
     static int gapBetweenTopAndBottomBoxes, distanceBetweenBoxes;
@@ -22,7 +22,7 @@ public class AppConstants {
         //Inicialización de constantes del juego
         AppConstants.gravity = gravity;
         AppConstants.VELOCITY_WHEN_JUMPED = velWhenJumped;
-        gapBetweenTopAndBottomBoxes = 600;
+        gapBetweenTopAndBottomBoxes = AppConstants.getBitmapBank().getCharacterHeight() * 4;
         AppConstants.numberOfBoxes = 2;
         AppConstants.boxVelocity = boxVelocity;
         AppConstants.minBoxOffsetY = (int) (AppConstants.gapBetweenTopAndBottomBoxes / 2.0);

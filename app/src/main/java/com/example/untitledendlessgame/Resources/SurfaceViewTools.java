@@ -7,21 +7,22 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.view.WindowManager;
 
 import com.example.untitledendlessgame.R;
 
 public class SurfaceViewTools {
     private Context context;
     public Paint pRects, pIcons;
-    public Paint pBold[] = new Paint[5], pRegular[] = new Paint[5];
+    public Paint[] pBold = new Paint[5];
+    public Paint[] pRegular = new Paint[5];
     public int iconSeparation, optionSeparation, landSeparation;
     public static boolean intentFlag;
 
     public SurfaceViewTools(Context context) {
         this.context = context;
-        this.iconSeparation = 0;
-        this.optionSeparation = 0;
+        iconSeparation = 0;
+        optionSeparation = 0;
+        landSeparation = 0;
         intentFlag = false;
 
         //Inicialización pinceles:
@@ -29,11 +30,7 @@ public class SurfaceViewTools {
         for (int i = 0; i < pBold.length; i++) {
             pBold[i] = new Paint();
             pBold[i].setColor(Color.WHITE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                pBold[i].setTypeface(context.getResources().getFont(R.font.comfortaa_bold));
-            } else {
-                pBold[i].setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-bold.ttf"));
-            }
+            setTypeface(pBold[i], R.font.comfortaa_bold, "fonts/comfortaa-bold.ttf");
             pBold[i].setAntiAlias(true);
         }
 
@@ -41,22 +38,14 @@ public class SurfaceViewTools {
         for (int i = 0; i < pRegular.length; i++) {
             pRegular[i] = new Paint();
             pRegular[i].setColor(Color.WHITE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                pRegular[i].setTypeface(context.getResources().getFont(R.font.comfortaa_regular));
-            } else {
-                pRegular[i].setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/comfortaa-regular.ttf"));
-            }
+            setTypeface(pRegular[i], R.font.comfortaa_regular, "fonts/comfortaa-regular.ttf");
             pRegular[i].setAntiAlias(true);
         }
 
         //Paint iconos
         pIcons = new Paint();
         pIcons.setColor(Color.WHITE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            pIcons.setTypeface(context.getResources().getFont(R.font.icons_solid));
-        } else {
-            pIcons.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/icons-solid.ttf"));
-        }
+        setTypeface(pIcons, R.font.icons_solid, "fonts/icons-solid.ttf");
         pIcons.setAntiAlias(true);
 
         //Paint para rectángulos límite de onTouch
@@ -80,7 +69,7 @@ public class SurfaceViewTools {
     }
 
     public Bitmap scale(Bitmap bitmap, int newWidth, int newHeight) {
-//        if (bitmap.getHeight() == newHeight && bitmap.getWidth() == newWidth) return;
+        if (bitmap.getHeight() == newHeight && bitmap.getWidth() == newWidth) return bitmap;
         return Bitmap.createScaledBitmap(bitmap, (bitmap.getWidth() * newHeight) / bitmap.getHeight(),
                 (bitmap.getHeight() * newWidth) / bitmap.getWidth(), true);
     }
@@ -99,5 +88,13 @@ public class SurfaceViewTools {
             return bitmapAux;
         }
         return Bitmap.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * newHeight) / bitmapAux.getHeight(), newHeight, true);
+    }
+
+    private Typeface setTypeface(Paint p, int resource, String asset){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return p.setTypeface(context.getResources().getFont(resource));
+        } else {
+            return p.setTypeface(Typeface.createFromAsset(context.getAssets(), asset));
+        }
     }
 }
