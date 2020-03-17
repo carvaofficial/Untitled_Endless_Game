@@ -32,4 +32,19 @@
     <string name="exit_game_question">¿Está seguro que desea salir?</string>
     <string name="exit_game_no">Volver</string>
     <string name="exit_game_yes">Salir</string>
+    <string name="score">Puntuación</string>
+    <string name="time">Tiempo</string>
+    <string name="go_title1">Fin del</string>
+    <string name="go_title2">juego</string>
+    <string name="restart">Reiniciar</string>
+    <string name="back_to_menu">Volver al menú</string>
+    <string name="markers">Marcadores</string>
+    <string name="best_score">Mejor puntuación</string>
+    <string name="best_time">Mejor tiempo</string>
+    <string name="max_jumps">Máximo de saltos</string>
+    <string name="total_collisions">Colisiones totales</string>
+    <string name="total_score">Puntuación total</string>
+    <string name="total_jumps">Total de saltos</string>
+    <string name="max_touches">Máximo de toques</string>
+    <string name="total_touches">Total de toques</string>
 </resources>

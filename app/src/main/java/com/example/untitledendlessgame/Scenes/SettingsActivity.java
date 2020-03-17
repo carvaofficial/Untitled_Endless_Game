@@ -49,10 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
         //Configuración de decorado de la actividad
         Tools.manageDecorationView(this, false);
 
-        preferences = getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        settings = getSharedPreferences("Settings", Context.MODE_PRIVATE);
 
         //Inicialización componentes
-        btnBack = findViewById(R.id.btnBack);
+        btnBack = findViewById(R.id.btnBackSettings);
         btnPlayGames = findViewById(R.id.btnPlayGames);
         swMusic = findViewById(R.id.swMusic);
         swEffects = findViewById(R.id.swEffects);
@@ -64,14 +64,14 @@ public class SettingsActivity extends AppCompatActivity {
         typefacedSpinner();
 
         //Propiedades componentes
-        swMusic.setChecked(preferences.getBoolean("Music", true));
-        swEffects.setChecked(preferences.getBoolean("Effects", true));
-        swVibration.setChecked(preferences.getBoolean("Vibration", true));
-        swGyroscope.setChecked(preferences.getBoolean("Gyroscope", false));
-        swThemeAuto.setChecked(preferences.getBoolean("ThemeAuto", false));
-        theme1Activated = preferences.getBoolean("Theme1", true);
-        theme2Activated = preferences.getBoolean("Theme2", false);
-        spinnerLang.setSelection(preferences.getInt("Language", 0));
+        swMusic.setChecked(settings.getBoolean("Music", true));
+        swEffects.setChecked(settings.getBoolean("Effects", true));
+        swVibration.setChecked(settings.getBoolean("Vibration", true));
+        swGyroscope.setChecked(settings.getBoolean("Gyroscope", false));
+        swThemeAuto.setChecked(settings.getBoolean("ThemeAuto", false));
+        theme1Activated = settings.getBoolean("Theme1", true);
+        theme2Activated = settings.getBoolean("Theme2", false);
+        spinnerLang.setSelection(settings.getInt("Language", 0));
         Log.i("Lang", "onCreate: " + Locale.getDefault().getDisplayLanguage());
 
         if (theme1Activated) {
@@ -127,11 +127,10 @@ public class SettingsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 music = isChecked;
                 if (vibration) vibrate(10);
-                //TODO tratar de pasar a operación ternaria
                 if (isChecked) {
-                    gameMusic.start();
+                    mediaPlayer.start();
                 } else {
-                    gameMusic.pause();
+                    mediaPlayer.pause();
                 }
             }
         });
@@ -194,7 +193,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        editor = preferences.edit();
+        editor = settings.edit();
         editor.putBoolean("Music", swMusic.isChecked());
         editor.putBoolean("Effects", swEffects.isChecked());
         editor.putBoolean("Vibration", swVibration.isChecked());
@@ -204,7 +203,7 @@ public class SettingsActivity extends AppCompatActivity {
         editor.putBoolean("Theme2", theme2Activated);
         editor.putInt("Language", langSelected);
         editor.apply();
-        Tools.establishPreferences(this);
+        Tools.establishSettings(this);
         finish();
         overridePendingTransition(0, 0);
     }

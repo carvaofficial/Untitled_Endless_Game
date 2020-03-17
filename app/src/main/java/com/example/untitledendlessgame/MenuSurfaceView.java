@@ -10,8 +10,8 @@ import android.view.SurfaceHolder;
 
 import com.example.untitledendlessgame.Resources.SurfaceViewTools;
 import com.example.untitledendlessgame.Resources.Tools;
-import com.example.untitledendlessgame.Scenes.CreditsActivity;
 import com.example.untitledendlessgame.Scenes.CreditsScene;
+import com.example.untitledendlessgame.Scenes.MarkersActivity;
 import com.example.untitledendlessgame.Scenes.MenuScene;
 import com.example.untitledendlessgame.Scenes.GameModeScene;
 import com.example.untitledendlessgame.Scenes.Scene;
@@ -47,11 +47,11 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
         Tools.getScreenInfo();
 
         //Inicialización booleanas Settings
-        Tools.establishPreferences(this.context);
+        Tools.establishSettings(this.context);
 
         //Inicialización de hardware por cada sesión
         if (!Once.beenDone(Once.THIS_APP_SESSION, INITIALIZE_HARDWARE)) {
-            Tools.initializeHardware(this.context, Tools.MENU_MUSIC);
+            Tools.initializeHardware(this.context, Tools.MENU_MUSIC, true);
             Once.markDone(INITIALIZE_HARDWARE);
         }
 
@@ -97,7 +97,8 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 actualScene = new CreditsScene(Scene.ACHIEVEMENTS, context, screenWidth, screenHeight, orientation);
                 break;
             case Scene.MARKERS:
-                actualScene = new CreditsScene(Scene.MARKERS, context, screenWidth, screenHeight, orientation);
+                SurfaceViewTools.intentFlag = true;
+                Tools.createIntent(context, MarkersActivity.class, false, false);
                 break;
             case Scene.SETTINGS:
                 SurfaceViewTools.intentFlag = true;
@@ -105,8 +106,7 @@ public class MenuSurfaceView extends SurfaceView implements SurfaceHolder.Callba
                 break;
             case Scene.CREDITS:
                 SurfaceViewTools.intentFlag = true;
-                Tools.createIntent(context, CreditsActivity.class, false, false);
-//                actualScene = new CreditsScene(Scene.CREDITS, context, screenWidth, screenHeight, orientation);
+                actualScene = new CreditsScene(Scene.CREDITS, context, screenWidth, screenHeight, orientation);
                 break;
         }
         this.SVSceneNumber = actualScene.getSceneNumber();

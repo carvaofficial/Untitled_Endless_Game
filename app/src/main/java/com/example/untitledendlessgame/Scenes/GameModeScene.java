@@ -254,7 +254,7 @@ public class GameModeScene extends Scene {
                     if (!gameSelected) {
                         Tools.createIntent(context, Game1Activity.class, false, true);
                     }
-                    if (music && gameMusic.isPlaying()) gameMusic.stop();
+                    if (music && mediaPlayer.isPlaying()) mediaPlayer.stop();
                 }
                 break;
         }

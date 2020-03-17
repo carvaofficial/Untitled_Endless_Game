@@ -25,7 +25,7 @@ public class BitmapBank {
         if (Tools.theme2) {
             img = R.drawable.background2;
         }
-        background = BitmapFactory.decodeResource(resource, img);
+
         background = AppConstants.SVTools.scaleHeight(img, screenHeight);
 
         character = new Bitmap[6];
@@ -37,8 +37,8 @@ public class BitmapBank {
 
         //Inicialización de cajas:
         //Cajas marrones
-        boxTop = BitmapFactory.decodeResource(resource, R.drawable.box_top);
-        boxBottom = BitmapFactory.decodeResource(resource, R.drawable.box_bottom);
+        boxTop = BitmapFactory.decodeResource(resource, R.drawable.box_b_top);
+        boxBottom = BitmapFactory.decodeResource(resource, R.drawable.box_b_bottom);
 
         //Cajas blancas
         whiteBoxTop = BitmapFactory.decodeResource(resource, R.drawable.box_w_top);

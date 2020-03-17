@@ -47,4 +47,23 @@
     <string name="exit_game_question">Are you sure you want to leave?</string>
     <string name="exit_game_no">Come back</string>
     <string name="exit_game_yes">Exit</string>
+    <string name="score">Score</string>
+    <string name="time">Time</string>
+    <string name="go_title1">Game</string>
+    <string name="go_title2">Over</string>
+    <string name="restart">Restart</string>
+    <string name="back_to_menu">Back to menu</string>
+    <string name="markers">Markers</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="best_score">Best score</string>
+    <string name="best_time">Best time</string>
+    <string name="max_jumps">Max jumps</string>
+    <string name="total_collisions">Total collisions</string>
+    <string name="total_score">Total score</string>
+    <string name="total_jumps">Total jumps</string>
+    <string name="max_touches">Max touches</string>
+    <string name="total_touches">Total touches</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

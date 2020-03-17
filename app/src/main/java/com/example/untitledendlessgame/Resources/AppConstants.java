@@ -8,9 +8,10 @@ public class AppConstants {
     static SurfaceViewTools SVTools;
     private static BitmapBank bitmapBank;
     private static GameEngine gameEngine;
+    private static SoundsBank soundsBank;
     public static int VELOCITY_WHEN_JUMPED;
     static int gravity;
-    static int gapBetweenTopAndBottomBoxes, distanceBetweenBoxes;
+    static int initialGapBetweenTopAndBottomBoxes, gapBetweenTopAndBottomBoxes, distanceBetweenBoxes;
     static int numberOfBoxes, boxVelocity, minBoxOffsetY, maxBoxOffsetY;
 
 
@@ -22,7 +23,8 @@ public class AppConstants {
         //Inicialización de constantes del juego
         AppConstants.gravity = gravity;
         AppConstants.VELOCITY_WHEN_JUMPED = velWhenJumped;
-        gapBetweenTopAndBottomBoxes = AppConstants.getBitmapBank().getCharacterHeight() * 4;
+        initialGapBetweenTopAndBottomBoxes = AppConstants.getBitmapBank().getCharacterHeight() * 4;
+        gapBetweenTopAndBottomBoxes = initialGapBetweenTopAndBottomBoxes;
         AppConstants.numberOfBoxes = 2;
         AppConstants.boxVelocity = boxVelocity;
         AppConstants.minBoxOffsetY = (int) (AppConstants.gapBetweenTopAndBottomBoxes / 2.0);
@@ -34,9 +36,16 @@ public class AppConstants {
         SVTools.pBold[0].setTextAlign(Paint.Align.CENTER);
         SVTools.pBold[0].setTextSize(screenWidth / 6);
         SVTools.pBold[1].setTextAlign(Paint.Align.CENTER);
-        SVTools.pBold[1].setTextSize(screenWidth / 6);
+        SVTools.pBold[1].setTextSize(SVTools.pBold[0].getTextSize());
+        //Propiedades Paint para temporizador
+        SVTools.pRegular[0].setColor(Color.BLACK);
+        SVTools.pRegular[0].setTextAlign(Paint.Align.LEFT);
+        SVTools.pRegular[0].setTextSize(screenWidth / 18);
+        SVTools.pRegular[1].setTextAlign(Paint.Align.LEFT);
+        SVTools.pRegular[1].setTextSize(SVTools.pRegular[0].getTextSize());
 
-        gameEngine = new GameEngine();
+        gameEngine = new GameEngine(3);
+        soundsBank = new SoundsBank(context);
     }
 
     public static BitmapBank getBitmapBank() {
@@ -45,5 +54,9 @@ public class AppConstants {
 
     public static GameEngine getGameEngine() {
         return gameEngine;
+    }
+
+    public static SoundsBank getSoundsBank() {
+        return soundsBank;
     }
 }

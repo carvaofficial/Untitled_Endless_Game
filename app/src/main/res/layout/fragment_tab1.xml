@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context=".Scenes.MarkersTabs.Tab1Fragment">
+
+    <TextView
+        android:id="@+id/tvGM1Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa_bold"
+        android:text="@string/gamemode1"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGM1Title">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvGM1Score2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/best_score"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvGM1Time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/best_time"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM1Score2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM1Score2" />
+
+            <TextView
+                android:id="@+id/tvGM1MaxJumps2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/max_jumps"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM1Time2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM1Time2" />
+
+            <TextView
+                android:id="@+id/tvGM1Collisions2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_collisions"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM1MaxJumps2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM1MaxJumps2" />
+
+            <TextView
+                android:id="@+id/tvGM1TotalScore2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_score"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM1Collisions2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM1Collisions2" />
+
+            <TextView
+                android:id="@+id/tvGM1TotalJumps2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_jumps"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM1TotalScore2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM1TotalScore2" />
+
+            <TextView
+                android:id="@+id/tvGM1Score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1Score2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1Score2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1Score2" />
+
+            <TextView
+                android:id="@+id/tvGM1Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1Time2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM1Score"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1Time2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1Time2" />
+
+            <TextView
+                android:id="@+id/tvGM1MaxJumps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1MaxJumps2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM1Time"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1MaxJumps2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1MaxJumps2" />
+
+            <TextView
+                android:id="@+id/tvGM1Collisions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1Collisions2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM1MaxJumps"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1Collisions2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1Collisions2" />
+
+            <TextView
+                android:id="@+id/tvGM1TotalScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1TotalScore2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM1Collisions"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1TotalScore2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1TotalScore2" />
+
+            <TextView
+                android:id="@+id/tvGM1TotalJumps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM1TotalJumps2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM1TotalScore"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM1TotalJumps2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM1TotalJumps2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

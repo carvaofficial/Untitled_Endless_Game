@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         Once.initialise(this);
         //Primera vez SharedPreferences
         if (!Once.beenDone(Once.THIS_APP_INSTALL, DEFAULT_SHARED_PREFERENCES)) {
-            Tools.defaultPreferences(this);
+            Tools.defaultSettings(this);
+            Tools.defaultMarkers(this);
             Once.markDone(DEFAULT_SHARED_PREFERENCES);
         }
 
@@ -68,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //Reestablecer Once's de los juegos
-        Tools.reDoOnce(Tools.TIMER);
+        reDoOnce(TIMER);
 
-        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (music && !mediaPlayer.isPlaying()) mediaPlayer.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (music && gameMusic.isPlaying() && !intentFlag) gameMusic.pause();
+        if (music && mediaPlayer.isPlaying() && !intentFlag) mediaPlayer.pause();
     }
 
     @Override
@@ -89,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
         //Controla el volumen si se silencia la aplicación
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (music && !mediaPlayer.isPlaying()) mediaPlayer.start();
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (music && !mediaPlayer.isPlaying()) mediaPlayer.start();
     }
 
     @Override
@@ -117,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     if (vibration) vibrate(10);
                     MainActivity.super.onBackPressed();
-                    gameMusic.stop();
-                    gameEffects.release();
+                    mediaPlayer.stop();
+                    menuEffects.release();
                     vibrator.cancel();
                 }
             });

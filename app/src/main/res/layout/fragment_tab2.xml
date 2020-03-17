@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context=".Scenes.MarkersTabs.Tab2Fragment">
+
+    <TextView
+        android:id="@+id/tvGM2Title"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa_bold"
+        android:text="@string/gamemode2"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvGM2Title">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvGM2Score2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/best_score"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvGM2Time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/best_time"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM2Score2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM2Score2" />
+
+            <TextView
+                android:id="@+id/tvGM2MaxTouches2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/max_touches"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM2Time2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM2Time2" />
+
+            <TextView
+                android:id="@+id/tvGM2Collisions2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_collisions"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM2MaxTouches2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM2MaxTouches2" />
+
+            <TextView
+                android:id="@+id/tvGM2TotalScore2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_score"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM2Collisions2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM2Collisions2" />
+
+            <TextView
+                android:id="@+id/tvGM2TotalTouches2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:text="@string/total_touches"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/tvGM2TotalScore2"
+                app:layout_constraintTop_toBottomOf="@+id/tvGM2TotalScore2" />
+
+            <TextView
+                android:id="@+id/tvGM2Score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2Score2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2Score2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2Score2" />
+
+            <TextView
+                android:id="@+id/tvGM2Time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2Time2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM2Score"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2Time2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2Time2" />
+
+            <TextView
+                android:id="@+id/tvGM2MaxTouches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2MaxTouches2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM2Time"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2MaxTouches2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2MaxTouches2" />
+
+            <TextView
+                android:id="@+id/tvGM2Collisions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2Collisions2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM2MaxTouches"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2Collisions2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2Collisions2" />
+
+            <TextView
+                android:id="@+id/tvGM2TotalScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2TotalScore2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM2Collisions"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2TotalScore2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2TotalScore2" />
+
+            <TextView
+                android:id="@+id/tvGM2TotalTouches"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_regular"
+                android:textAlignment="textEnd"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvGM2TotalTouches2"
+                app:layout_constraintEnd_toEndOf="@+id/tvGM2TotalScore"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/tvGM2TotalTouches2"
+                app:layout_constraintTop_toTopOf="@+id/tvGM2TotalTouches2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

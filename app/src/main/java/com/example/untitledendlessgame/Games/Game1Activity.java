@@ -2,11 +2,11 @@ package com.example.untitledendlessgame.Games;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 
-import com.example.untitledendlessgame.MainActivity;
 import com.example.untitledendlessgame.Resources.AppConstants;
+import com.example.untitledendlessgame.Resources.SurfaceViewTools;
 import com.example.untitledendlessgame.Resources.Tools;
 
 import static com.example.untitledendlessgame.Resources.Tools.*;
@@ -27,33 +27,28 @@ public class Game1Activity extends AppCompatActivity {
         game1.setKeepScreenOn(true);
         setContentView(game1);
 
-        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (music && !mediaPlayer.isPlaying()) mediaPlayer.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (music && gameMusic.isPlaying()) gameMusic.pause();
+        if (music && mediaPlayer.isPlaying() && !SurfaceViewTools.intentFlag) mediaPlayer.pause();
 //        game1.thread.suspendThread();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (music && !gameMusic.isPlaying()) gameMusic.start();
+        if (music && !mediaPlayer.isPlaying()) mediaPlayer.start();
 //        game1.thread.resumeThread();
         Tools.manageDecorationView(this, false);
-        //Pasamos al SurfaceView el estado del la orientación de la pantalla
-//        game1.setOrientation(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+        //Controla el volumen si se silencia la aplicación
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(new Intent(Game1Activity.this, MainActivity.class));
-        if (music && gameMusic.isPlaying()) gameMusic.stop();
-        Tools.initializeHardware(this, Tools.MENU_MUSIC);
+
     }
 }

@@ -2,23 +2,31 @@ package com.example.untitledendlessgame.Resources;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.CountDownTimer;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameEngine {
-    GameBackground background;
+    ScrollManager background;
     public Character character;
-    private static int velocity = 3;
-    private boolean gameState, running;
+    private boolean gameRunning, running, crossed;
+    public boolean collision;
     private ArrayList<Box> boxes;
     private Random random;
-    int score, scoringBox;
+    CountDownTimer decreaseGapCountDown;
+    public Timer timer;
+    public TimerTask time;
+    public int score, minutes, seconds, timeLength;
+    int scoringBox, gapDecrease;
 
-    public GameEngine() {
-        background = new GameBackground(velocity);
+    public GameEngine(int backgroundVelocity) {
+        background = new ScrollManager(backgroundVelocity);
         character = new Character(5);
-        gameState = false;
+        gameRunning = false;
         running = true;
         boxes = new ArrayList<>();
         random = new Random();
@@ -35,14 +43,45 @@ public class GameEngine {
         //Inicialización marcador para puntuación
         score = 0;
         scoringBox = 0;
+        decreaseGapCountDown = new CountDownTimer(300, 300) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                crossed = true;
+                gapDecrease = (int) (0.05 * (double) AppConstants.gapBetweenTopAndBottomBoxes);
+            }
+        };
+
+        //Timer de tiempo de juego
+        Rect rTime = new Rect();
+        minutes = 0;
+        seconds = -1;
+        String sTime = "00:00";
+        AppConstants.SVTools.pRegular[0].getTextBounds(sTime, 0, sTime.length(), rTime);
+        timeLength = rTime.right;
+        time = new TimerTask() {
+            @Override
+            public void run() {
+                seconds++;
+                if (seconds == 60) {
+                    minutes++;
+                    seconds = 0;
+                }
+            }
+        };
+        timer = new Timer();
     }
 
-    public boolean isGameState() {
-        return gameState;
+    public boolean isGameRunning() {
+        return gameRunning;
     }
 
-    public void setGameState(boolean gameState) {
-        this.gameState = gameState;
+    public void setGameRunning(boolean gameRunning) {
+        this.gameRunning = gameRunning;
     }
 
     public boolean isRunning() {
@@ -70,7 +109,7 @@ public class GameEngine {
 
     public void updateAndDrawCharacter(Canvas canvas) {
         int currentFrame = character.getCurrentFrame();
-        if (isGameState()) {
+        if (isGameRunning()) {
             //Establece una velocidad de salto y una gravedad, siempre que la posición Y del personaje
             //sea menor que la altura de la pantalla - su altura*2 (para que no llegue al borde de abajo de la pantalla)
             if ((character.getY() < Tools.SCREEN_HEIGHT - AppConstants.getBitmapBank().getCharacterHeight() * 2) ||
@@ -100,14 +139,12 @@ public class GameEngine {
                 currentFrame = 0;
             }
             character.setCurrentFrame(currentFrame);
-        } else {
-
         }
     }
 
     public void updateAndDrawBoxes(Canvas canvas) {
         //Si el juego está en funcionamiento la puntuación se activa y las cajas se mueven
-        if (isGameState()) {
+        if (isGameRunning()) {
             //Movimiento de cajas
             for (int i = 0; i < AppConstants.numberOfBoxes; i++) {
                 if (boxes.get(i).getX() < -AppConstants.getBitmapBank().getBoxWidth()) {
@@ -147,28 +184,55 @@ public class GameEngine {
                 canvas.drawRect(boxes.get(i).getCollisions()[j], AppConstants.SVTools.pRects);
             }
         }
+    }
 
+    public void updateAndDrawCollisions() {
+        //Si las colisiones de las cajas interceptan a la colisión del personaje el juego finaliza
+        Log.i("Coll", "updateAndDrawCollisions: " + boxes.get(0).getCollisions()[0]);
+        Log.i("Coll", "updateAndDrawCollisions: " + character.getCollision());
         if ((boxes.get(0).getCollisions()[0].intersect(character.getCollision()) ||
                 boxes.get(0).getCollisions()[1].intersect(character.getCollision())) ||
                 (boxes.get(1).getCollisions()[0].intersect(character.getCollision()) ||
                         boxes.get(1).getCollisions()[1].intersect(character.getCollision()))) {
-            setGameState(false);
+            setGameRunning(false);
             setRunning(false);
+            collision = true;
         }
     }
 
-    public void updateandDrawScore(Canvas canvas) {
+    public void updateAndDrawScoreAndTime(Canvas canvas) {
         //Puntuación: si el personaje pasa por el medio de las cajas, se suma puntuación
-        if (isGameState()) {
+        if (isGameRunning()) {
             if (boxes.get(scoringBox).getX() < character.getX() + AppConstants.getBitmapBank().getBoxWidth() / 2) {
+                if (Tools.effects) AppConstants.getSoundsBank().playBoxCrossed();
                 score++;
                 scoringBox++;
                 if (scoringBox > AppConstants.numberOfBoxes - 1) {
                     scoringBox = 0;
                 }
+                if (AppConstants.gapBetweenTopAndBottomBoxes <= AppConstants.getBitmapBank().getCharacterWidth() * 2) {
+                    AppConstants.gapBetweenTopAndBottomBoxes = AppConstants.getBitmapBank().getCharacterWidth() * 2;
+                } else {
+                    if (score % 5 == 0 && score != 0) {
+                        decreaseGapCountDown.start();
+                    }
+                }
+            } else {
+                if (crossed && gapDecrease != 0) {
+                    AppConstants.gapBetweenTopAndBottomBoxes--;
+                    gapDecrease--;
+                    if (gapDecrease == 0) crossed = false;
+                }
             }
-        }
 
+            //Dibujo de tiempo
+            canvas.drawText(String.format("%02d:%02d", minutes, seconds),
+                    Tools.SCREEN_WIDTH - timeLength + AppConstants.SVTools.getPixels(1),
+                    AppConstants.SVTools.pRegular[0].getTextSize() + AppConstants.SVTools.getPixels(1)
+                    , AppConstants.SVTools.pRegular[0]);
+            canvas.drawText(String.format("%02d:%02d", minutes, seconds), Tools.SCREEN_WIDTH - timeLength,
+                    AppConstants.SVTools.pRegular[1].getTextSize(), AppConstants.SVTools.pRegular[1]);
+        }
         //Dibujo de puntuación
         canvas.drawText(String.valueOf(score), Tools.SCREEN_WIDTH / 2 + AppConstants.SVTools.getPixels(5),
                 Tools.SCREEN_HEIGHT / 4 + AppConstants.SVTools.getPixels(5), AppConstants.SVTools.pBold[0]);

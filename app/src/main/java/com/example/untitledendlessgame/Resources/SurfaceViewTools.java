@@ -90,11 +90,11 @@ public class SurfaceViewTools {
         return Bitmap.createScaledBitmap(bitmapAux, (bitmapAux.getWidth() * newHeight) / bitmapAux.getHeight(), newHeight, true);
     }
 
-    private Typeface setTypeface(Paint p, int resource, String asset){
+    private void setTypeface(Paint p, int resource, String asset) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return p.setTypeface(context.getResources().getFont(resource));
+            p.setTypeface(context.getResources().getFont(resource));
         } else {
-            return p.setTypeface(Typeface.createFromAsset(context.getAssets(), asset));
+            p.setTypeface(Typeface.createFromAsset(context.getAssets(), asset));
         }
     }
 }

@@ -31,29 +31,30 @@ public class Tools {
     public static Point screenSize;
     public static int SCREEN_WIDTH, SCREEN_HEIGHT;
 
-    //Shared Preferences
-    public static SharedPreferences preferences;
-    public static SharedPreferences.Editor editor;
-
     //Hardware tools
     public static Vibrator vibrator;
     public static AudioManager audioManager;
-    public static MediaPlayer gameMusic;
-    public static SoundPool gameEffects;
-    private static int volume;
+    public static MediaPlayer mediaPlayer;
+    public static SoundPool menuEffects;
 
+    //Shared Preferences
+    public static SharedPreferences settings;
+    public static SharedPreferences markers;
+    public static SharedPreferences.Editor editor;
+    //Variables for SharedPreferences
     public static boolean music, effects, vibration, gyroscope, theme1, theme2, themeAuto;
-    public static int MENU_MUSIC = R.raw.main_music, GAME_MUSIC = R.raw.main_music; //Music resources
-
-    //Tags for Once
-    public static final String TIMER = "Timer";
+    public static int totalJumps, maxJumpsInAMatch, totalCrossedBoxes, maxCrossedBoxes, totalCrashedBoxes, bestTimeInSeconds;
+    public static int MENU_MUSIC = R.raw.main_music, GAME_MUSIC = R.raw.game_music; //Music resources
 
     //General Intent tool
     public static Intent intent;
 
+    //Tags for Once
+    public static final String DISPLAY = "Display", TIMER = "Timer";
+
     public static void initializeMetrics(Context context) {
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        display = windowManager.getDefaultDisplay();
+        display = windowManager != null ? windowManager.getDefaultDisplay() : null;
         screenSize = new Point();
         display.getSize(Tools.screenSize);
         metrics = new DisplayMetrics();
@@ -61,19 +62,18 @@ public class Tools {
     }
 
     public static void getScreenInfo() {
-        String DISPLAY_TAG = "Display";
-        Log.i(DISPLAY_TAG, "Nombre: " + display.getName());
-        Log.i(DISPLAY_TAG, String.format("Width: %d\nHeight: %d", screenSize.x, screenSize.y));
-        Log.i(DISPLAY_TAG, String.format("Width (px): %d\nHeight (px): %d", metrics.widthPixels, metrics.heightPixels));
-        Log.i(DISPLAY_TAG, "Density: " + metrics.densityDpi);
-        Log.i(DISPLAY_TAG, String.format("DPI X: %f\nDPI Y: %f", metrics.xdpi, metrics.ydpi));
+        Log.i(DISPLAY, "Nombre: " + display.getName());
+        Log.i(DISPLAY, String.format("Width: %d\nHeight: %d", screenSize.x, screenSize.y));
+        Log.i(DISPLAY, String.format("Width (px): %d\nHeight (px): %d", metrics.widthPixels, metrics.heightPixels));
+        Log.i(DISPLAY, "Density: " + metrics.densityDpi);
+        Log.i(DISPLAY, String.format("DPI X: %f\nDPI Y: %f", metrics.xdpi, metrics.ydpi));
         //Deprecated
-        Log.i(DISPLAY_TAG, String.format("Screen Width: %d\nScreen Height: %d", display.getWidth(), display.getHeight()));
+        Log.i(DISPLAY, String.format("Screen Width: %d\nScreen Height: %d", display.getWidth(), display.getHeight()));
     }
 
-    public static void defaultPreferences(Context context) {
-        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        editor = preferences.edit();
+    public static void defaultSettings(Context context) {
+        settings = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        editor = settings.edit();
         editor.putBoolean("Music", true);
         editor.putBoolean("Effects", true);
         editor.putBoolean("Vibration", true);
@@ -85,28 +85,52 @@ public class Tools {
         editor.apply();
     }
 
-    public static void establishPreferences(Context context) {
-        preferences = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
-        music = preferences.getBoolean("Music", true);
-        effects = preferences.getBoolean("Effects", true);
-        vibration = preferences.getBoolean("Vibration", true);
-        gyroscope = preferences.getBoolean("Gyroscope", false);
-        themeAuto = preferences.getBoolean("ThemeAuto", false);
-        theme1 = preferences.getBoolean("Theme1", true);
-        theme2 = preferences.getBoolean("Theme2", false);
+    public static void establishSettings(Context context) {
+        settings = context.getSharedPreferences("Settings", Context.MODE_PRIVATE);
+        music = settings.getBoolean("Music", true);
+        effects = settings.getBoolean("Effects", true);
+        vibration = settings.getBoolean("Vibration", true);
+        gyroscope = settings.getBoolean("Gyroscope", false);
+        themeAuto = settings.getBoolean("ThemeAuto", false);
+        theme1 = settings.getBoolean("Theme1", true);
+        theme2 = settings.getBoolean("Theme2", false);
     }
 
-    public static void initializeHardware(Context context, int music) {
+    public static void defaultMarkers(Context context) {
+        markers = context.getSharedPreferences("Markers", Context.MODE_PRIVATE);
+        editor = markers.edit();
+        editor.putInt("totalJumps", 0);
+        editor.putInt("maxJumpsInAMatch", 0);
+        editor.putInt("totalCrossedBoxes", 0);
+        editor.putInt("maxCrossedBoxes", 0);
+        editor.putInt("totalCrashedBoxes", 0);
+        editor.putInt("bestTimeInSeconds", 0);
+        editor.apply();
+    }
+
+    public static void establishMarkers(Context context) {
+        markers = context.getSharedPreferences("Markers", Context.MODE_PRIVATE);
+        totalJumps = markers.getInt("totalJumps", 0);
+        maxJumpsInAMatch = markers.getInt("maxJumpsInAMatch", 0);
+        totalCrossedBoxes = markers.getInt("totalCrossedBoxes", 0);
+        maxCrossedBoxes = markers.getInt("maxCrossedBoxes", 0);
+            totalCrashedBoxes = markers.getInt("totalCrashedBoxes", 0);
+        bestTimeInSeconds = markers.getInt("bestTimeInSeconds", 0);
+    }
+
+    public static void initializeHardware(Context context, int music, boolean loop) {
         //Inicialización música y efectos
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        gameMusic = MediaPlayer.create(context, music);
-        gameMusic.setVolume(volume, volume);
+        float volume = audioManager != null ? audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) : 0;
+        mediaPlayer = MediaPlayer.create(context, music);
+        mediaPlayer.setVolume(volume, volume);
+        mediaPlayer.setLooping(loop);
 
         SoundPool.Builder builder = new SoundPool.Builder();
         builder.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build());
-        gameEffects = builder.build();
+        builder.setMaxStreams(10);
+        menuEffects = builder.build();
 
         //Inicialización vibración
         vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);

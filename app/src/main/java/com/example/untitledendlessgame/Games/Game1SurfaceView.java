@@ -1,16 +1,18 @@
 package com.example.untitledendlessgame.Games;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 
 import com.example.untitledendlessgame.Resources.AppConstants;
+import com.example.untitledendlessgame.Resources.SurfaceViewTools;
 import com.example.untitledendlessgame.Resources.Tools;
 
 import java.util.Arrays;
@@ -21,10 +23,11 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
     SurfaceHolder surfaceHolder;
     Context context;
     GameThread thread;
-    CountDownTimer countDown;
+    CountDownTimer countDown, finishCountDown;
     private boolean runBoxes;
+    private int jumps;
 
-    public Game1SurfaceView(Context context) {
+    public Game1SurfaceView(final Context context) {
         super(context);
         this.context = context;
         surfaceHolder = getHolder();
@@ -37,7 +40,6 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
         countDown = new CountDownTimer(4000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-
             }
 
             @Override
@@ -45,19 +47,69 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
                 runBoxes = true;
             }
         };
+        //CountDownTimer para lanzar GameOverActivity
+        finishCountDown = new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
 
-        Tools.initializeHardware(this.context, Tools.GAME_MUSIC);
+            }
+
+            @Override
+            public void onFinish() {
+                Intent intent = new Intent(context, GameOverActivity.class);
+                intent.putExtra("Score", AppConstants.getGameEngine().score);
+                intent.putExtra("Jumps", jumps);
+                intent.putExtra("Time", AppConstants.getGameEngine().minutes * 60 +
+                        AppConstants.getGameEngine().seconds);
+                context.startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                ((Activity) context).overridePendingTransition(0, 0);
+                ((Activity) context).finish();
+            }
+        };
+
+        //Inicialización variables para marcadores
+        jumps = 0;
+
+        Tools.initializeHardware(this.context, Tools.GAME_MUSIC, true);
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        AppConstants.getGameEngine().updateAndDrawBackground(canvas);
+        if (runBoxes) AppConstants.getGameEngine().updateAndDrawBoxes(canvas);
+        if (AppConstants.getGameEngine().isRunning() && runBoxes)
+            AppConstants.getGameEngine().updateAndDrawCollisions();
+        AppConstants.getGameEngine().updateAndDrawScoreAndTime(canvas);
+        AppConstants.getGameEngine().updateAndDrawCharacter(canvas);
+
+        if (AppConstants.getGameEngine().collision) {
+            if (Tools.vibration) Tools.vibrate(500);
+            if (Tools.effects) {
+                AppConstants.getSoundsBank().playCrash();
+                AppConstants.getSoundsBank().playCykaBlyat();
+            }
+            AppConstants.getGameEngine().collision = false;
+            SurfaceViewTools.intentFlag = true;
+            AppConstants.getGameEngine().timer.cancel();
+            finishCountDown.start();
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN && AppConstants.getGameEngine().isRunning()) {
-            AppConstants.getGameEngine().setGameState(true);
+            AppConstants.getGameEngine().setGameRunning(true);
             AppConstants.getGameEngine().character.setVelocity(AppConstants.VELOCITY_WHEN_JUMPED);
+            if (Tools.effects) AppConstants.getSoundsBank().playJumps();
             if (!Once.beenDone(Tools.TIMER)) {
                 countDown.start();
+                AppConstants.getGameEngine().timer.scheduleAtFixedRate(
+                        AppConstants.getGameEngine().time, 0, 1000);
                 Once.markDone(Tools.TIMER);
             }
+            jumps++;
         }
         return true;
     }
@@ -100,10 +152,12 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     //TODO pendiente averiguar cómo pausar el hilo cuando la actividad está en pausa, y evitar un reinicio
     class GameThread extends Thread {
-        SurfaceHolder surfaceHolder;
+        final SurfaceHolder surfaceHolder;
         private boolean running, suspend;
-        long startTime, loopTime;
-        long DELAY = 30;
+        //        long startTime, loopTime;
+//        long DELAY = 30;
+        long sleepTime = 0, startTime;
+        final int FPS = 33, TPS = 1000000000, loopTime = TPS / FPS;
 
         GameThread(SurfaceHolder surfaceHolder) {
             this.surfaceHolder = surfaceHolder;
@@ -118,11 +172,40 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
             this.running = running;
         }
 
+//        public void run() {
+//            try {
+//                while (isRunning()) {
+//                    Canvas canvas;
+//                    startTime = SystemClock.uptimeMillis();
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        canvas = surfaceHolder.lockHardwareCanvas();
+//                    } else {
+//                        canvas = surfaceHolder.lockCanvas(null);
+//                    }
+//                    if (canvas != null) {
+//                        synchronized (surfaceHolder) {
+//                            while (suspend) {
+//                                surfaceHolder.wait();
+//                            }
+//                            draw(canvas);
+//                            surfaceHolder.unlockCanvasAndPost(canvas);
+//                        }
+//                    }
+//                    loopTime = SystemClock.uptimeMillis() - startTime;
+//                    if (loopTime <= DELAY) {
+//                        Thread.sleep(DELAY - loopTime);
+//                    }
+//                }
+//            } catch (InterruptedException ie) {
+//                Log.e("Thread Exception", Arrays.toString(ie.getStackTrace()));
+//            }
+//        }
+
         public void run() {
             try {
                 while (isRunning()) {
                     Canvas canvas;
-                    startTime = SystemClock.uptimeMillis();
+                    startTime = System.nanoTime();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         canvas = surfaceHolder.lockHardwareCanvas();
                     } else {
@@ -133,18 +216,14 @@ public class Game1SurfaceView extends SurfaceView implements SurfaceHolder.Callb
                             while (suspend) {
                                 surfaceHolder.wait();
                             }
-                            AppConstants.getGameEngine().updateAndDrawBackground(canvas);
-                            if (runBoxes) {
-                                AppConstants.getGameEngine().updateAndDrawBoxes(canvas);
-                            }
-                            AppConstants.getGameEngine().updateandDrawScore(canvas);
-                            AppConstants.getGameEngine().updateAndDrawCharacter(canvas);
+                            draw(canvas);
                             surfaceHolder.unlockCanvasAndPost(canvas);
                         }
                     }
-                    loopTime = SystemClock.uptimeMillis() - startTime;
-                    if (loopTime < DELAY) {
-                        Thread.sleep(DELAY - loopTime);
+                    startTime += loopTime;
+                    sleepTime = startTime - System.nanoTime();
+                    if (sleepTime > 0) {
+                        Thread.sleep(sleepTime / 1000000);
                     }
                 }
             } catch (InterruptedException ie) {
