@@ -32,12 +32,12 @@
     <string name="google_play_games">Google Play Games</string>
     <string name="login">Login</string>
     <string name="theme_auto_disabled">Auto mode is not available.</string>
-    <string name="gamemode1">Jumpin\' boxes</string>
+    <string name="gamemode1">Dodgin\' boxes</string>
     <string name="lang_sp" translatable="false">Español</string>
     <string name="lang_en" translatable="false">English</string>
     <string name="lang_fr" translatable="false">Français</string>
-    <string name="service_not_avaliable">Service not avaliable</string>
-    <string name="gservice_not_avaliable">Google Services not temporarily available</string>
+    <string name="service_not_available">Service not available</string>
+    <string name="gservice_not_available">Google Services not temporarily available</string>
     <string name="accept">Accept</string>
     <string name="welcome_excl">¡Welcome!</string>
     <string name="welcome_txt">It seems that there\'s a new player. Do you want to see a learning tutorial?</string>
@@ -54,8 +54,6 @@
     <string name="restart">Restart</string>
     <string name="back_to_menu">Back to menu</string>
     <string name="markers">Markers</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="best_score">Best score</string>
     <string name="best_time">Best time</string>
     <string name="max_jumps">Max jumps</string>
@@ -64,6 +62,46 @@
     <string name="total_jumps">Total jumps</string>
     <string name="max_touches">Max touches</string>
     <string name="total_touches">Total touches</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="game_dev_and_des">Design and development</string>
+    <string name="dev_name" translatable="false">Angel Carvajal (CARVA)</string>
+    <string name="kumbagua" translatable="false">José Urdaneta (Kumbagua)</string>
+    <string name="sin_project" translatable="false">Sin Project</string>
+    <string name="graphics">Graphics</string>
+    <string name="based_on">Based on:</string>
+    <string name="surang">surang from Flaticon</string>
+    <string name="vectors_market">Vectors Market from Flaticon</string>
+    <string name="freepik">Freepik from Flaticon</string>
+    <string name="photo3idea_studio">photo3idea_studio from Flaticon</string>
+    <string name="game_not_available">Game not available</string>
+    <string name="game_not_available_msg">Game not available at the moment. Coming soon...</string>
+    <string name="fonts">Fonts</string>
+    <string name="google_fonts" translatable="false">Google Fonts</string>
+    <string name="font_awesome" translatable="false">Font Awesome</string>
+    <string name="appreciations">Appreciations</string>
+    <string name="mark_diangelo">Mark DiAngelo from Soundbible</string>
+    <string name="vladimir">Vladimir from Soundbible</string>
+    <string name="grabskc">grabskc from Zedge</string>
+    <string name="paula" translatable="false">Paula Pérez</string>
+    <string name="credits_msg">Press the screen to return to the menu</string>
+    <string name="sergiy" translatable="false">Sergiy Nigeruk</string>
+    <string name="collisions">Collisions</string>
+    <string name="controls">Controls</string>
+    <string name="collisions_desc">The boxes are static obstacles that the character must avoid, passing through the gap between them. If the character collides with a box, the game ends.</string>
+    <string name="collisions_desc2">The game is affected by the laws of gravity, that is, if the character stops flying, it will fall towards the road. If the character hits the road, the game ends.</string>
+    <string name="controls_desc">Just tap the screen to make the character fly higher and not tend to fall on the road. But beware! , if the character flies too much then it will cost him to go through the hollow of the boxes.</string>
+    <string name="score_desc">Every time the character goes through the gap between the boxes, his score will add 1 point.</string>
+    <string name="achievements">Achievements</string>
+    <string name="ach1_jumps">Flying bunny</string>
+    <string name="ach2_jumps">Don rabbit</string>
+    <string name="ach3_jumps">They call me \'Bad Bunny\'</string>
+    <string name="ach1_scores">It\'s something</string>
+    <string name="ach2_scores">Not bad for a beginner</string>
+    <string name="ach3_scores">F*ck, I\'m awesome!</string>
+    <string name="ach1_crashes">Beginner\'s bad luck</string>
+    <string name="ach2_crashes">Well, it happens to everyone</string>
+    <string name="ach3_crashes">Hey, yours is a serious problem ...</string>
+    <string name="ach1_times">How fast did you finish ...</string>
+    <string name="ach2_times">Hold on like Rambo</string>
+    <string name="ach3_times">Better than Chuck Norris</string>
+    <string name="good_ware">Good Ware from Flaticon</string>
 </resources>

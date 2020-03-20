@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:context=".Scenes.MarkersTabs.Tab1Fragment">
+    tools:context=".Scenes.Markers.Tab1Fragment">
 
     <TextView
         android:id="@+id/tvGM1Title"

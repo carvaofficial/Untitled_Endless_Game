@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.untitledendlessgame">
+    package="com.carva.untitledendlessgame">
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".Scenes.MarkersActivity"></activity>
+        <activity android:name=".Scenes.Achievments.AchievementsActivity"></activity>
+        <activity android:name=".Scenes.Markers.MarkersActivity" />
         <activity android:name=".Games.GameOverActivity" />
         <activity android:name=".Scenes.CreditsActivity" />
         <activity
