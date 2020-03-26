@@ -317,6 +317,11 @@ public class GameModeScene extends Scene {
                     if (vibration) vibrate(10);
                     if (gameSelected) {
                         Tools.createIntent(context, Game1Activity.class, false, true);
+                        if (!orientation) {
+                            int width = SCREEN_HEIGHT;
+                            SCREEN_HEIGHT = SCREEN_WIDTH;
+                            SCREEN_WIDTH = width;
+                        }
                         if (music && mediaPlayer.isPlaying()) mediaPlayer.stop();
                     }
                     if (!gameSelected) {
